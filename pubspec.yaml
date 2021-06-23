@@ -1,5 +1,5 @@
 name: torus_direct
-description: Interact with the Torus Network to assign, store and retrieve private keys.
+description: Torus CustomAuth SDK for Flutter applications.
 version: 1.0.0+4
 homepage: https://github.com/sam-parks/torus-direct-flutter
 

@@ -30,5 +30,5 @@ After setting your verifier, you can use TorusDirect to trigger a login:
 torusLoginInfo = await TorusDirect.triggerLogin();
 ```
 
-After this you're good to go, go to [Torus Developer][https://developer.tor.us] nad get your verifier spun up today!
+After this you're good to go, go to [Torus Developer](https://developer.tor.us) nad get your verifier spun up today!
 
