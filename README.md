@@ -32,3 +32,7 @@ torusLoginInfo = await TorusDirect.triggerLogin();
 
 After this you're good to go, go to [Torus Developer](https://developer.tor.us) nad get your verifier spun up today!
 
+## Authors
+
+- [Torus](https://tor.us)
+- [Sam Parks](https://github.com/sam-parks)
