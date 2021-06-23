@@ -1,0 +1,56 @@
+
+
+group 'com.torusresearch.torus_direct'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+   
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+
+
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility org.gradle.api.JavaVersion.VERSION_1_8
+        targetCompatibility org.gradle.api.JavaVersion.VERSION_1_8
+    }
+}
+
+
+dependencies{
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'org.torusresearch:torus-direct-android-sdk:1.0.5'
+}
+

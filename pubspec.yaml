@@ -1,0 +1,24 @@
+name: torus_direct
+description: Interact with the Torus Network to assign, store and retrieve private keys.
+version: 1.0.0+4
+homepage: https://github.com/sam-parks/torus-direct-flutter
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+  flutter: ">=1.12.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android: 
+        package: com.torusresearch.torusdirect
+        pluginClass: TorusDirectPlugin
+      ios:
+        pluginClass: TorusDirectPlugin
+
+  uses-material-design: true
+
