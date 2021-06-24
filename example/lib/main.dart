@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     await TorusDirect.init(
         network: TorusNetwork.testnet,
         redirectUri: Uri.parse(
-            'torusapp://org.torusresearch.torusdirectexample/redirect'));
+            'torusapp://org.torusresearch.torusdirectandroid/redirect'));
   }
 
   @override

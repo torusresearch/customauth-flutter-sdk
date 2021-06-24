@@ -66,7 +66,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             } catch (e: Throwable) {
                 launch(Dispatchers.Main) {
                     val unwrappedError = unwrapCompletionException(e)
-                    result.error(unwrappedError::class.qualifiedName, unwrappedError.message, null)
+                    result.error(unwrappedError::class.simpleName, unwrappedError.message, null)
                 }
             }
         }

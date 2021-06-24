@@ -63,9 +63,9 @@ class TorusDirect {
       );
     } on PlatformException catch (e) {
       switch (e.code) {
-        case "org.torusresearch.torusdirect.types.UserCancelledException":
+        case "UserCancelledException":
           throw new UserCancelledException();
-        case "org.torusresearch.torusdirect.types.NoAllowedBrowserFoundException":
+        case "NoAllowedBrowserFoundException":
           throw new NoAllowedBrowserFoundException();
         default:
           throw e;
