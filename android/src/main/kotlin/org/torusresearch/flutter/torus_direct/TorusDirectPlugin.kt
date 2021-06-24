@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.torusresearch.torusdirect.TorusDirectSdk
 import org.torusresearch.torusdirect.types.*
+import org.torusresearch.torusdirect.utils.Helpers.unwrapCompletionException
 
 /** TorusDirectPlugin */
 class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
@@ -63,7 +64,10 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             } catch (e: NotImplementedError) {
                 launch(Dispatchers.Main) { result.notImplemented() }
             } catch (e: Throwable) {
-                launch(Dispatchers.Main) { result.error(e::class.qualifiedName, e.message, null) }
+                launch(Dispatchers.Main) {
+                    val unwrappedError = unwrapCompletionException(e)
+                    result.error(unwrappedError::class.qualifiedName, unwrappedError.message, null)
+                }
             }
         }
     }

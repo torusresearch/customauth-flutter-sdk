@@ -27,6 +27,10 @@ class TorusCredentials {
   );
 }
 
+class UserCancelledException implements Exception {}
+
+class NoAllowedBrowserFoundException implements Exception {}
+
 class TorusDirect {
   static const MethodChannel _channel = const MethodChannel('torus_direct');
 
@@ -43,18 +47,29 @@ class TorusDirect {
       verifier: String,
       clientId: String,
       jwtParams: Map}) async {
-    final String typeOfLoginString = typeOfLogin.toString();
-    final Map<dynamic, dynamic> loginResponse =
-        await _channel.invokeMethod('triggerLogin', {
-      'typeOfLogin':
-          typeOfLoginString.substring(typeOfLoginString.lastIndexOf('.') + 1),
-      'verifier': verifier,
-      'clientId': clientId,
-      'jwtParams': jwtParams
-    });
-    return TorusCredentials(
-      loginResponse['publicAddress'],
-      loginResponse['privateKey'],
-    );
+    try {
+      final String typeOfLoginString = typeOfLogin.toString();
+      final Map<dynamic, dynamic> loginResponse =
+          await _channel.invokeMethod('triggerLogin', {
+        'typeOfLogin':
+            typeOfLoginString.substring(typeOfLoginString.lastIndexOf('.') + 1),
+        'verifier': verifier,
+        'clientId': clientId,
+        'jwtParams': jwtParams
+      });
+      return TorusCredentials(
+        loginResponse['publicAddress'],
+        loginResponse['privateKey'],
+      );
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case "org.torusresearch.torusdirect.types.UserCancelledException":
+          throw new UserCancelledException();
+        case "org.torusresearch.torusdirect.types.NoAllowedBrowserFoundException":
+          throw new NoAllowedBrowserFoundException();
+        default:
+          throw e;
+      }
+    }
   }
 }

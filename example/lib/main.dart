@@ -39,14 +39,18 @@ class _MyAppState extends State<MyApp> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Login with'),
+            ),
             ElevatedButton(
-                onPressed: _googleLogin, child: Text('Google Login')),
+                onPressed: _login(_withGoogle), child: Text('Google')),
             ElevatedButton(
-                onPressed: _facebookLogin, child: Text('Facebook Login')),
+                onPressed: _login(_withFacebook), child: Text('Facebook')),
             ElevatedButton(
-                onPressed: _redditLogin, child: Text('Reddit Login')),
+                onPressed: _login(_withReddit), child: Text('Reddit ')),
             ElevatedButton(
-                onPressed: _discordLogin, child: Text('Discord Login')),
+                onPressed: _login(_withDiscord), child: Text('Discord')),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Private key: $_privateKey'),
@@ -57,48 +61,51 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  _googleLogin() async {
-    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+  VoidCallback _login(Future<TorusCredentials> Function() method) {
+    return () async {
+      try {
+        final TorusCredentials credentials = await method();
+        setState(() {
+          _privateKey = credentials.privateKey;
+        });
+      } on UserCancelledException {
+        print("User cancelled.");
+      } on NoAllowedBrowserFoundException {
+        print("No allowed browser found.");
+      }
+    };
+  }
+
+  Future<TorusCredentials> _withGoogle() {
+    return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.google,
         verifier: 'google-lrc',
         clientId:
             '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com',
         jwtParams: {});
-    setState(() {
-      _privateKey = credentials.privateKey;
-    });
   }
 
-  _facebookLogin() async {
-    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+  Future<TorusCredentials> _withFacebook() {
+    return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.facebook,
         verifier: 'facebook-lrc',
         clientId: '617201755556395',
         jwtParams: {});
-    setState(() {
-      _privateKey = credentials.privateKey;
-    });
   }
 
-  _redditLogin() async {
-    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+  Future<TorusCredentials> _withReddit() {
+    return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.reddit,
         verifier: 'torus-reddit-test',
         clientId: 'YNsv1YtA_o66fA',
         jwtParams: {});
-    setState(() {
-      _privateKey = credentials.privateKey;
-    });
   }
 
-  _discordLogin() async {
-    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+  Future<TorusCredentials> _withDiscord() {
+    return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.discord,
         verifier: 'discord-lrc',
         clientId: '682533837464666198',
         jwtParams: {});
-    setState(() {
-      _privateKey = credentials.privateKey;
-    });
   }
 }
