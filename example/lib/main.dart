@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:torus_direct/torus_direct.dart';
 
 void main() {
@@ -23,12 +22,10 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      await TorusDirect.init();
-    } on PlatformException {
-      print('Something went wrong.');
-    }
+    await TorusDirect.init(
+        network: TorusNetwork.testnet,
+        redirectUri: Uri.parse(
+            'torusapp://org.torusresearch.torusdirectexample/redirect'));
   }
 
   @override
