@@ -23,17 +23,12 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.torusresearch.torusdirectandroid</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>flutter</string>
-				<string>com.googleusercontent.apps.360801018673-1tmrfbvc2og29c8lmoljpl16ptkc20b3</string>
+				<string>torusapp</string>
 			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array/>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

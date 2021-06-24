@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-import torus_direct
+import TorusSwiftDirectSDK
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,10 +11,9 @@ import torus_direct
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-
+    
   override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     TorusSwiftDirectSDK.handle(url: url)
     return true
   }
 }
-

@@ -1,18 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.torusresearch.torusdirect">
-   <application>
-    <activity android:name="org.torusresearch.torusdirect.activity.StartUpActivity"
+    package="org.torusresearch.torusdirect">
+    <application>
+        <!-- Overwrite org.torusresearch.torusdirect.activity, Flutter requires activity to implement AppCompat theme -->
+        <!-- TODO: Remove built-in activity, let developer configure their own redirect activity -->
+        <activity
+            android:name="org.torusresearch.torusdirect.activity.StartUpActivity"
             android:theme="@style/Theme.AppCompat.Light"
+            android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
-                 <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="torusapp"
-                    android:host="io.flutter.app.FlutterApplication"
+                <data
+                    android:host="${torusRedirectHost}"
                     android:pathPattern="/*"
-                    android:pathPrefix="/redirect"/>
+                    android:pathPrefix="${torusRedirectPathPrefix}"
+                    android:scheme="${torusRedirectScheme}" />
             </intent-filter>
         </activity>
-  </application>
+    </application>
 </manifest>

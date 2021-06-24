@@ -9,7 +9,7 @@
 #endif
 
 @implementation TorusDirectPlugin
-+ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
++ (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   [SwiftTorusDirectPlugin registerWithRegistrar:registrar];
 }
 @end
