@@ -3,6 +3,30 @@ import 'package:flutter/services.dart';
 
 enum TorusNetwork { mainnet, testnet }
 
+enum TorusLogin {
+  google,
+  facebook,
+  reddit,
+  discord,
+  twitch,
+  github,
+  apple,
+  linkedin,
+  twitter,
+  line,
+  email_password,
+  jwt
+}
+
+class TorusCredentials {
+  final String publicAddress;
+  final String privateKey;
+  TorusCredentials(
+    this.publicAddress,
+    this.privateKey,
+  );
+}
+
 class TorusDirect {
   static const MethodChannel _channel = const MethodChannel('torus_direct');
 
@@ -12,5 +36,25 @@ class TorusDirect {
       'network': networkString.substring(networkString.lastIndexOf('.') + 1),
       'redirectUri': redirectUri.toString()
     });
+  }
+
+  static Future<TorusCredentials> triggerLogin(
+      {typeOfLogin: TorusLogin,
+      verifier: String,
+      clientId: String,
+      jwtParams: Map}) async {
+    final String typeOfLoginString = typeOfLogin.toString();
+    final Map<dynamic, dynamic> loginResponse =
+        await _channel.invokeMethod('triggerLogin', {
+      'typeOfLogin':
+          typeOfLoginString.substring(typeOfLoginString.lastIndexOf('.') + 1),
+      'verifier': verifier,
+      'clientId': clientId,
+      'jwtParams': jwtParams
+    });
+    return TorusCredentials(
+      loginResponse['publicAddress'],
+      loginResponse['privateKey'],
+    );
   }
 }

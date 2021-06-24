@@ -58,18 +58,47 @@ class _MyAppState extends State<MyApp> {
   }
 
   _googleLogin() async {
-    print('Login.google');
+    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+        typeOfLogin: TorusLogin.google,
+        verifier: 'google-lrc',
+        clientId:
+            '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com',
+        jwtParams: {});
+    setState(() {
+      _privateKey = credentials.privateKey;
+    });
   }
 
   _facebookLogin() async {
-    print('Login.facebook');
+    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+        typeOfLogin: TorusLogin.facebook,
+        verifier: 'facebook-lrc',
+        clientId: '617201755556395',
+        jwtParams: {});
+    setState(() {
+      _privateKey = credentials.privateKey;
+    });
   }
 
   _redditLogin() async {
-    print('Login.reddit');
+    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+        typeOfLogin: TorusLogin.reddit,
+        verifier: 'torus-reddit-test',
+        clientId: 'YNsv1YtA_o66fA',
+        jwtParams: {});
+    setState(() {
+      _privateKey = credentials.privateKey;
+    });
   }
 
   _discordLogin() async {
-    print('Login.discord');
+    final TorusCredentials credentials = await TorusDirect.triggerLogin(
+        typeOfLogin: TorusLogin.discord,
+        verifier: 'discord-lrc',
+        clientId: '682533837464666198',
+        jwtParams: {});
+    setState(() {
+      _privateKey = credentials.privateKey;
+    });
   }
 }
