@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import TorusSwiftDirectSDK
 
 struct TorusDirectArgs {
     let network: String;
@@ -37,26 +38,57 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             return
         }
         self.torusDirectArgs = TorusDirectArgs(network: network, redirectUri: redirectUri)
-        print("init: network=\(network), redirectUri=\(redirectUri)")
+        print("TorusDirectPlugin#init: network=\(network), redirectUri=\(redirectUri)")
         result(nil)
     case "triggerLogin":
+        guard let initArgs = self.torusDirectArgs
+        else {
+            result(FlutterError(
+                code: "NotInitializedException",
+                message: "TorusDirect.init has to be called first",
+                details: nil))
+            return
+        }
         guard
             let typeOfLogin = args["typeOfLogin"] as? String,
             let verifier = args["verifier"] as? String,
             let clientId = args["clientId"] as? String
         else {
             result(FlutterError(
-                code: "MISSING_ARGUMENTS",
+                code: "MissingArgumentException",
                 message: "Missing triggerLogin arguments",
                 details: nil))
             return
         }
-        let jwtParams = args["jwtParams"] as? Dictionary<String, Any>
-        print("triggerLogin: typeOfLogin=\(typeOfLogin), verifier=\(verifier), clientId=\(clientId)")
-        result([
-            "publicAddress": "<public address>",
-            "privateKey": "<privateKey"
-        ])
+        guard let loginProvider = LoginProviders(rawValue: typeOfLogin) else {
+            result(FlutterError(
+                code: "InvalidTypeOfLogin",
+                message: "Invalid type of login",
+                details: nil))
+            return
+        }
+        
+        let jwtParams = args["jwtParams"] as? Dictionary<String, String>
+        let subVerifierDetails = SubVerifierDetails(
+            loginType: .web,
+            loginProvider: loginProvider,
+            clientId: clientId,
+            verifierName: verifier,
+            redirectURL: initArgs.redirectUri,
+            browserRedirectURL: "https://scripts.toruswallet.io/redirect.html",
+            extraQueryParams: [:],
+            jwtParams: jwtParams ?? [:]
+        )
+        let torusDirectSdk = TorusSwiftDirectSDK(
+            aggregateVerifierType: .singleLogin,
+            aggregateVerifierName: verifier,
+            subVerifierDetails: [subVerifierDetails]
+        )
+        torusDirectSdk.triggerLogin(browserType: .external).done { data in
+            result(data)
+        }.catch { err in
+            result(FlutterError())
+        }
     default:
         result(FlutterMethodNotImplemented)
     }
