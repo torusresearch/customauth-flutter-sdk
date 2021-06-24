@@ -56,6 +56,19 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val response = runMethodCall(call)
+                launch(Dispatchers.Main) { result.success(response) }
+            } catch (e: NotImplementedError) {
+                launch(Dispatchers.Main) { result.notImplemented() }
+            } catch (e: Throwable) {
+                launch(Dispatchers.Main) { result.error(e::class.qualifiedName, e.message, null) }
+            }
+        }
+    }
+
+    private fun runMethodCall(@NonNull call: MethodCall): Any? {
         when (call.method) {
             "init" -> {
                 torusDirectArgs = DirectSdkArgs(
@@ -64,49 +77,34 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     call.argument("redirectUri")
                 )
                 Log.d(
-                    "${javaClass.simpleName}#init",
+                    "${TorusDirectPlugin::class.qualifiedName}#init",
                     "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
                 )
-                result.success(null)
+                return null
             }
             "triggerLogin" -> {
-                CoroutineScope(Dispatchers.Default).launch {
-                    try {
-                        val torusDirectSdk =
-                            TorusDirectSdk(torusDirectArgs, activity ?: context)
-                        val torusResponse = torusDirectSdk.triggerLogin(
-                            SubVerifierDetails(
-                                LoginType.valueOfLabel(call.argument("typeOfLogin")),
-                                call.argument<String>("verifier"),
-                                call.argument<String>("clientId"),
-                                mapJwtParams(call.argument("jwtParams")),
-                                activity == null
-                            )
-                        ).join()
-                        Log.d(
-                            "${javaClass.simpleName}#triggerLogin",
-                            "publicAddress=${torusResponse.publicAddress}"
-                        )
-                        launch(Dispatchers.Main) {
-                            result.success(
-                                mapOf(
-                                    "publicAddress" to torusResponse.publicAddress,
-                                    "privateKey" to torusResponse.privateKey
-                                )
-                            )
-                        }
-                    } catch (e: Throwable) {
-                        Log.e(
-                            "${javaClass.simpleName}#triggerLogin", e.message ?: ""
-                        )
-                        launch(Dispatchers.Main) {
-                            result.error(e.javaClass.canonicalName, e.message, null)
-                        }
-                    }
-                }
+                val torusDirectSdk =
+                    TorusDirectSdk(torusDirectArgs, activity ?: context)
+                val torusResponse = torusDirectSdk.triggerLogin(
+                    SubVerifierDetails(
+                        LoginType.valueOfLabel(call.argument("typeOfLogin")),
+                        call.argument<String>("verifier"),
+                        call.argument<String>("clientId"),
+                        mapJwtParams(call.argument("jwtParams")),
+                        activity == null
+                    )
+                ).join()
+                Log.d(
+                    "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
+                    "publicAddress=${torusResponse.publicAddress}"
+                )
+                return mapOf(
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey
+                )
             }
-            else -> result.notImplemented()
         }
+        throw NotImplementedError()
     }
 
     private fun mapJwtParams(jwtParams: Map<String, Any>?): Auth0ClientOptions? {
