@@ -30,7 +30,7 @@ await TorusDirect.init(
 Trigger login while your user is interacting with your application:
 
 ```dart
-TorusDirect.triggerLogin(
+await TorusDirect.triggerLogin(
     typeOfLogin: TorusLogin.google,
     verifier: 'google-lrc',
     clientId:
