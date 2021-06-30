@@ -46,7 +46,7 @@ class TorusDirect {
       {typeOfLogin: TorusLogin,
       verifier: String,
       clientId: String,
-      jwtParams: Map}) async {
+      Map jwtParams = const {}}) async {
     try {
       final String typeOfLoginString = typeOfLogin.toString();
       final Map<dynamic, dynamic> loginResponse =
