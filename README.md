@@ -38,6 +38,15 @@ await TorusDirect.triggerLogin(
     jwtParams: {});
 ```
 
+Or get Torus key directly if you're using JWT verifier:
+
+```dart
+await TorusDirect.getTorusKey(
+    verifier: 'acme-jwt',
+    verifierId: idToken.sub,
+    idToken: idToken.jwt);
+```
+
 ### Android-specific configuration
 
 Add custom URL schemes to your app by adding the following to your app `android/app/build.gradle`:

@@ -72,4 +72,24 @@ class TorusDirect {
       }
     }
   }
+
+  static Future<TorusCredentials> getTorusKey({
+    verifier: String,
+    verifierId: String,
+    idToken: String,
+    Map verifierParams = const {},
+  }) async {
+    verifierParams['verifier_id'] = verifierId;
+    final Map<dynamic, dynamic> getResponse =
+        await _channel.invokeMethod('getTorusKey', {
+      'verifier': verifier,
+      'verifierId': verifierId,
+      'idToken': idToken,
+      'verifierParams': verifierParams
+    });
+    return TorusCredentials(
+      getResponse['publicAddress'],
+      getResponse['privateKey'],
+    );
+  }
 }
