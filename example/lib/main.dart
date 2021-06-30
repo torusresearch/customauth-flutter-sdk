@@ -81,31 +81,27 @@ class _MyAppState extends State<MyApp> {
         typeOfLogin: TorusLogin.google,
         verifier: 'google-lrc',
         clientId:
-            '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com',
-        jwtParams: {});
+            '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com');
   }
 
   Future<TorusCredentials> _withFacebook() {
     return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.facebook,
         verifier: 'facebook-lrc',
-        clientId: '617201755556395',
-        jwtParams: {});
+        clientId: '617201755556395');
   }
 
   Future<TorusCredentials> _withReddit() {
     return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.reddit,
         verifier: 'torus-reddit-test',
-        clientId: 'YNsv1YtA_o66fA',
-        jwtParams: {});
+        clientId: 'YNsv1YtA_o66fA');
   }
 
   Future<TorusCredentials> _withDiscord() {
     return TorusDirect.triggerLogin(
         typeOfLogin: TorusLogin.discord,
         verifier: 'discord-lrc',
-        clientId: '682533837464666198',
-        jwtParams: {});
+        clientId: '682533837464666198');
   }
 }

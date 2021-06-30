@@ -107,6 +107,24 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "privateKey" to torusResponse.privateKey
                 )
             }
+            "getTorusKey" -> {
+                val torusDirectSdk =
+                    TorusDirectSdk(torusDirectArgs, activity ?: context)
+                val torusResponse = torusDirectSdk.getTorusKey(
+                    call.argument("verifier"),
+                    call.argument("verifierId"),
+                    call.argument("verifierParams"),
+                    call.argument("idToken")
+                ).join()
+                Log.d(
+                    "${TorusDirectPlugin::class.qualifiedName}#getTorusKey",
+                    "publicAddress=${torusResponse.publicAddress}"
+                )
+                return mapOf(
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey
+                )
+            }
         }
         throw NotImplementedError()
     }

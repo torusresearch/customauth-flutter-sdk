@@ -46,7 +46,7 @@ class TorusDirect {
       {typeOfLogin: TorusLogin,
       verifier: String,
       clientId: String,
-      jwtParams: Map}) async {
+      Map jwtParams = const {}}) async {
     try {
       final String typeOfLoginString = typeOfLogin.toString();
       final Map<dynamic, dynamic> loginResponse =
@@ -71,5 +71,25 @@ class TorusDirect {
           throw e;
       }
     }
+  }
+
+  static Future<TorusCredentials> getTorusKey({
+    verifier: String,
+    verifierId: String,
+    idToken: String,
+    Map verifierParams = const {},
+  }) async {
+    verifierParams['verifier_id'] = verifierId;
+    final Map<dynamic, dynamic> getResponse =
+        await _channel.invokeMethod('getTorusKey', {
+      'verifier': verifier,
+      'verifierId': verifierId,
+      'idToken': idToken,
+      'verifierParams': verifierParams
+    });
+    return TorusCredentials(
+      getResponse['publicAddress'],
+      getResponse['privateKey'],
+    );
   }
 }
