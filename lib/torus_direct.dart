@@ -49,8 +49,7 @@ class TorusDirect {
       Map jwtParams = const {}}) async {
     try {
       final String typeOfLoginString = typeOfLogin.toString();
-      final Map<dynamic, dynamic> loginResponse =
-          await _channel.invokeMethod('triggerLogin', {
+      final Map loginResponse = await _channel.invokeMethod('triggerLogin', {
         'typeOfLogin':
             typeOfLoginString.substring(typeOfLoginString.lastIndexOf('.') + 1),
         'verifier': verifier,
@@ -79,13 +78,15 @@ class TorusDirect {
     idToken: String,
     Map verifierParams = const {},
   }) async {
-    verifierParams['verifier_id'] = verifierId;
-    final Map<dynamic, dynamic> getResponse =
-        await _channel.invokeMethod('getTorusKey', {
+    final Map mergedVerfierParams = {
+      ...{'verifier_id': verifierId},
+      ...verifierParams
+    };
+    final Map getResponse = await _channel.invokeMethod('getTorusKey', {
       'verifier': verifier,
       'verifierId': verifierId,
       'idToken': idToken,
-      'verifierParams': verifierParams
+      'verifierParams': mergedVerfierParams
     });
     return TorusCredentials(
       getResponse['publicAddress'],
