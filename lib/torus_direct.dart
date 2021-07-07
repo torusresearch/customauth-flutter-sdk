@@ -34,11 +34,16 @@ class NoAllowedBrowserFoundException implements Exception {}
 class TorusDirect {
   static const MethodChannel _channel = const MethodChannel('torus_direct');
 
-  static Future<void> init({network: TorusNetwork, redirectUri: Uri}) async {
+  static Future<void> init(
+      {network: TorusNetwork,
+      redirectUri: Uri,
+      Uri? browserRedirectUri}) async {
     final String networkString = network.toString();
+    final Uri mergedBrowserRedirectUri = browserRedirectUri ?? redirectUri;
     await _channel.invokeMethod('init', {
       'network': networkString.substring(networkString.lastIndexOf('.') + 1),
-      'redirectUri': redirectUri.toString()
+      'redirectUri': redirectUri.toString(),
+      'browserRedirectUri': mergedBrowserRedirectUri.toString()
     });
   }
 

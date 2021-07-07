@@ -4,6 +4,7 @@ import TorusSwiftDirectSDK
 
 struct TorusDirectArgs {
     let network: String;
+    let browserRedirectUri: String;
     let redirectUri: String;
 }
 
@@ -29,6 +30,7 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
     case "init":
         guard
             let network = args["network"] as? String,
+            let browserRedirectUri = args["browserRedirectUri"] as? String,
             let redirectUri = args["redirectUri"] as? String
         else {
             result(FlutterError(
@@ -37,8 +39,11 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 details: nil))
             return
         }
-        self.torusDirectArgs = TorusDirectArgs(network: network, redirectUri: redirectUri)
-        print("TorusDirectPlugin#init: network=\(network), redirectUri=\(redirectUri)")
+        self.torusDirectArgs = TorusDirectArgs(
+            network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri)
+        print("TorusDirectPlugin#init: " +
+                "network=\(network), " +
+                "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri)")
         result(nil)
     case "triggerLogin":
         guard let initArgs = self.torusDirectArgs
@@ -75,7 +80,7 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             clientId: clientId,
             verifierName: verifier,
             redirectURL: initArgs.redirectUri,
-            browserRedirectURL: "https://scripts.toruswallet.io/redirect.html",
+            browserRedirectURL: initArgs.browserRedirectUri,
             extraQueryParams: [:],
             jwtParams: jwtParams ?? [:]
         )

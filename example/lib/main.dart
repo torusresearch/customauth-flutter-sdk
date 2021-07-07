@@ -24,6 +24,8 @@ class _MyAppState extends State<MyApp> {
   Future<void> initPlatformState() async {
     await TorusDirect.init(
         network: TorusNetwork.testnet,
+        browserRedirectUri:
+            Uri.parse('https://scripts.toruswallet.io/redirect.html'),
         redirectUri: Uri.parse(
             'torusapp://org.torusresearch.torusdirectandroid/redirect'));
   }

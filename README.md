@@ -23,9 +23,16 @@ Initialize the package:
 ```dart
 await TorusDirect.init(
     network: TorusNetwork.testnet,
+    browserRedirectUri:
+        Uri.parse('https://scripts.toruswallet.io/redirect.html'),
     redirectUri: Uri.parse(
         'torusapp://org.torusresearch.torusdirectandroid/redirect')); // Replace with your app URL
 ```
+
+`browserRedirectUri` is where you host your callback/redirect URL from OAuth provider (Google, Facebook, Twitter, etc),
+some of these providers do not accept custom scheme (only accept https), in these cases, you'll need a browser URL the proxy the OAuth result to your app custom scheme.
+
+If you don't supply `browserRedirectUri`, it will be default to `redirectUri`.
 
 Trigger login while your user is interacting with your application:
 
@@ -34,8 +41,7 @@ await TorusDirect.triggerLogin(
     typeOfLogin: TorusLogin.google,
     verifier: 'google-lrc',
     clientId:
-        '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com',
-    jwtParams: {});
+        '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com');
 ```
 
 Or get Torus key directly if you're using JWT verifier:

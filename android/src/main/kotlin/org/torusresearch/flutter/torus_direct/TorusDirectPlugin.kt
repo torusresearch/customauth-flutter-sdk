@@ -76,7 +76,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         when (call.method) {
             "init" -> {
                 torusDirectArgs = DirectSdkArgs(
-                    "https://scripts.toruswallet.io/redirect.html",
+                    call.argument("browserRedirectUri"),
                     TorusNetwork.valueOfLabel(call.argument("network")),
                     call.argument("redirectUri")
                 )
