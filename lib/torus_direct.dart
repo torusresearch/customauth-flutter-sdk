@@ -82,13 +82,14 @@ class TorusDirect {
         'jwtParams': jwtParams
       });
       return TorusCredentials(
-        loginResponse['email'],
-        loginResponse['name'],
-        loginResponse['profileImage'],
-        loginResponse['verifier'],
-        loginResponse['verifierId'],
-        loginResponse['typeOfLogin'],
-        TorusKey(loginResponse['publicAddress'], loginResponse['privateKey']),
+        loginResponse['email'] ?? '',
+        loginResponse['name'] ?? '',
+        loginResponse['profileImage'] ?? '',
+        loginResponse['verifier'] ?? '',
+        loginResponse['verifierId'] ?? '',
+        loginResponse['typeOfLogin'] ?? '',
+        TorusKey(loginResponse['publicAddress'] ?? '',
+            loginResponse['privateKey'] ?? ''),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
