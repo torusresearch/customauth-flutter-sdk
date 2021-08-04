@@ -18,12 +18,32 @@ enum TorusLogin {
   jwt
 }
 
-class TorusCredentials {
+class TorusKey {
   final String publicAddress;
   final String privateKey;
-  TorusCredentials(
+  TorusKey(
     this.publicAddress,
     this.privateKey,
+  );
+}
+
+class TorusCredentials {
+  final String email;
+  final String name;
+  final String profileImage;
+  final String verifier;
+  final String verifierId;
+  final String typeOfLogin;
+  final TorusKey torusKey;
+
+  TorusCredentials(
+    this.email,
+    this.name,
+    this.profileImage,
+    this.verifier,
+    this.verifierId,
+    this.typeOfLogin,
+    this.torusKey,
   );
 }
 
@@ -62,8 +82,13 @@ class TorusDirect {
         'jwtParams': jwtParams
       });
       return TorusCredentials(
-        loginResponse['publicAddress'],
-        loginResponse['privateKey'],
+        loginResponse['email'],
+        loginResponse['name'],
+        loginResponse['profileImage'],
+        loginResponse['verifier'],
+        loginResponse['verifierId'],
+        loginResponse['typeOfLogin'],
+        TorusKey(loginResponse['publicAddress'], loginResponse['privateKey']),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -77,7 +102,7 @@ class TorusDirect {
     }
   }
 
-  static Future<TorusCredentials> getTorusKey({
+  static Future<TorusKey> getTorusKey({
     verifier: String,
     verifierId: String,
     idToken: String,
@@ -93,7 +118,7 @@ class TorusDirect {
       'idToken': idToken,
       'verifierParams': mergedVerfierParams
     });
-    return TorusCredentials(
+    return TorusKey(
       getResponse['publicAddress'],
       getResponse['privateKey'],
     );
