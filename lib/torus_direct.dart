@@ -31,16 +31,12 @@ class TorusCredentials {
   final String email;
   final String name;
   final String profileImage;
-  final String verifier;
-  final String verifierId;
   final TorusKey torusKey;
 
   TorusCredentials(
     this.email,
     this.name,
     this.profileImage,
-    this.verifier,
-    this.verifierId,
     this.torusKey,
   );
 }
@@ -83,8 +79,6 @@ class TorusDirect {
         loginResponse['userInfo']['email'] ?? '',
         loginResponse['userInfo']['name'] ?? '',
         loginResponse['userInfo']['profileImage'] ?? '',
-        loginResponse['userInfo']['verifier'] ?? '',
-        loginResponse['userInfo']['verifierId'] ?? '',
         TorusKey(loginResponse['publicAddress'] ?? '',
             loginResponse['privateKey'] ?? ''),
       );

@@ -106,9 +106,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "userInfo" to mapOf(
                         "email" to torusResponse.userInfo.email,
                         "name" to torusResponse.userInfo.name,
-                        "profileImage" to torusResponse.userInfo.profileImage,
-                        "verifier" to torusResponse.userInfo.verifier,
-                        "verifierId" to torusResponse.userInfo.verifierId
+                        "profileImage" to torusResponse.userInfo.profileImage
                     ),
                     "publicAddress" to torusResponse.publicAddress,
                     "privateKey" to torusResponse.privateKey
