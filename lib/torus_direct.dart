@@ -82,12 +82,12 @@ class TorusDirect {
         'jwtParams': jwtParams
       });
       return TorusCredentials(
-        loginResponse['email'] ?? '',
-        loginResponse['name'] ?? '',
-        loginResponse['profileImage'] ?? '',
-        loginResponse['verifier'] ?? '',
-        loginResponse['verifierId'] ?? '',
-        loginResponse['typeOfLogin'] ?? '',
+        loginResponse['userInfo']['email'] ?? '',
+        loginResponse['userInfo']['name'] ?? '',
+        loginResponse['userInfo']['profileImage'] ?? '',
+        loginResponse['userInfo']['verifier'] ?? '',
+        loginResponse['userInfo']['verifierId'] ?? '',
+        loginResponse['userInfo']['typeOfLogin'] ?? '',
         TorusKey(loginResponse['publicAddress'] ?? '',
             loginResponse['privateKey'] ?? ''),
       );
