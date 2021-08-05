@@ -102,9 +102,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
                     "publicAddress=${torusResponse.publicAddress}"
                 )
-                return mapOf(
-                    "publicAddress" to torusResponse.publicAddress,
-                    "privateKey" to torusResponse.privateKey
+                return torusResponse
                 )
             }
             "getTorusKey" -> {
