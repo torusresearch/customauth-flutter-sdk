@@ -108,8 +108,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                         "name" to torusResponse.userInfo.name,
                         "profileImage" to torusResponse.userInfo.profileImage,
                         "verifier" to torusResponse.userInfo.verifier,
-                        "verifierId" to torusResponse.userInfo.verifierId,
-                        "typeOfLogin" to torusResponse.userInfo.typeOfLogin.toString()
+                        "verifierId" to torusResponse.userInfo.verifierId
                     ),
                     "publicAddress" to torusResponse.publicAddress,
                     "privateKey" to torusResponse.privateKey
