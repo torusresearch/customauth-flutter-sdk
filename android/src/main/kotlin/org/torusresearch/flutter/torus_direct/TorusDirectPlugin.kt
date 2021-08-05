@@ -103,7 +103,6 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "publicAddress=${torusResponse.publicAddress}"
                 )
                 return torusResponse
-                )
             }
             "getTorusKey" -> {
                 val torusDirectSdk =
