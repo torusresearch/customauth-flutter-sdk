@@ -102,7 +102,16 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                     "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
                     "publicAddress=${torusResponse.publicAddress}"
                 )
-                return torusResponse
+                return mapOf(
+                    "email" to torusResponse.email,
+                    "name" to torusResponse.name,
+                    "profileImage" to torusResponse.profileImage,
+                    "verifier" to torusResponse.verifier,
+                    "verifierId" to torusResponse.verifierId,
+                    "typeOfLogin" to torusResponse.typeOfLogin,
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey
+                )
             }
             "getTorusKey" -> {
                 val torusDirectSdk =
