@@ -18,13 +18,41 @@ enum TorusLogin {
   jwt
 }
 
+enum AggregateVerifierType { single_id_verifier }
+
 class TorusCredentials {
   final String publicAddress;
   final String privateKey;
+
   TorusCredentials(
     this.publicAddress,
     this.privateKey,
   );
+}
+
+class SubVerifierDetails {
+  final TorusLogin typeOfLogin;
+  final String verifier;
+  final String clientId;
+  final Map jwtParams;
+
+  SubVerifierDetails({
+    required this.typeOfLogin,
+    required this.verifier,
+    required this.clientId,
+    this.jwtParams = const {},
+  });
+
+  Map<String, dynamic> toMap() {
+    final String typeOfLoginString = typeOfLogin.toString();
+    return <String, dynamic>{
+      'typeOfLogin':
+          typeOfLoginString.substring(typeOfLoginString.lastIndexOf('.') + 1),
+      'verifier': verifier,
+      'clientId': clientId,
+      'jwtParams': jwtParams
+    };
+  }
 }
 
 class UserCancelledException implements Exception {}
@@ -34,10 +62,11 @@ class NoAllowedBrowserFoundException implements Exception {}
 class TorusDirect {
   static const MethodChannel _channel = const MethodChannel('torus_direct');
 
-  static Future<void> init(
-      {network: TorusNetwork,
-      redirectUri: Uri,
-      Uri? browserRedirectUri}) async {
+  static Future<void> init({
+    required TorusNetwork network,
+    required Uri redirectUri,
+    Uri? browserRedirectUri,
+  }) async {
     final String networkString = network.toString();
     final Uri mergedBrowserRedirectUri = browserRedirectUri ?? redirectUri;
     await _channel.invokeMethod('init', {
@@ -47,11 +76,12 @@ class TorusDirect {
     });
   }
 
-  static Future<TorusCredentials> triggerLogin(
-      {typeOfLogin: TorusLogin,
-      verifier: String,
-      clientId: String,
-      Map jwtParams = const {}}) async {
+  static Future<TorusCredentials> triggerLogin({
+    required TorusLogin typeOfLogin,
+    required String verifier,
+    required String clientId,
+    Map jwtParams = const {},
+  }) async {
     try {
       final String typeOfLoginString = typeOfLogin.toString();
       final Map loginResponse = await _channel.invokeMethod('triggerLogin', {
@@ -77,10 +107,41 @@ class TorusDirect {
     }
   }
 
+  static Future<TorusCredentials> triggerAggregateLogin({
+    required AggregateVerifierType aggerateVerifierType,
+    required String verifierIdentifier,
+    required List<SubVerifierDetails> subVerifierDetailsArray,
+  }) async {
+    try {
+      final String aggerateVerifierTypeString = aggerateVerifierType.toString();
+      final Map loginResponse =
+          await _channel.invokeMethod('triggerAggregateLogin', {
+        'aggerateVerifierType': aggerateVerifierTypeString
+            .substring(aggerateVerifierTypeString.lastIndexOf('.') + 1),
+        'verifierIdentifier': verifierIdentifier,
+        'subVerifierDetailsArray':
+            subVerifierDetailsArray.map((e) => e.toMap()).toList(),
+      });
+      return TorusCredentials(
+        loginResponse['publicAddress'],
+        loginResponse['privateKey'],
+      );
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case "UserCancelledException":
+          throw new UserCancelledException();
+        case "NoAllowedBrowserFoundException":
+          throw new NoAllowedBrowserFoundException();
+        default:
+          throw e;
+      }
+    }
+  }
+
   static Future<TorusCredentials> getTorusKey({
-    verifier: String,
-    verifierId: String,
-    idToken: String,
+    required String verifier,
+    required String verifierId,
+    required String idToken,
     Map verifierParams = const {},
   }) async {
     final Map mergedVerfierParams = {
