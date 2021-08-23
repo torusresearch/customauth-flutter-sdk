@@ -55,6 +55,23 @@ class SubVerifierDetails {
   }
 }
 
+class TorusSubVerifierInfo {
+  final String verifier;
+  final String idToken;
+
+  TorusSubVerifierInfo({
+    required this.verifier,
+    required this.idToken,
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'verifier': verifier,
+      'idToken': idToken,
+    };
+  }
+}
+
 class UserCancelledException implements Exception {}
 
 class NoAllowedBrowserFoundException implements Exception {}
@@ -153,6 +170,24 @@ class TorusDirect {
       'verifierId': verifierId,
       'idToken': idToken,
       'verifierParams': mergedVerfierParams
+    });
+    return TorusCredentials(
+      getResponse['publicAddress'],
+      getResponse['privateKey'],
+    );
+  }
+
+  static Future<TorusCredentials> getAggregateTorusKey({
+    required String verifier,
+    required String verifierId,
+    required List<TorusSubVerifierInfo> subVerifierInfoArray,
+  }) async {
+    final Map getResponse =
+        await _channel.invokeMethod('getAggregateTorusKey', {
+      'verifier': verifier,
+      'verifierId': verifierId,
+      'subVerifierInfoArray':
+          subVerifierInfoArray.map((e) => e.toMap()).toList(),
     });
     return TorusCredentials(
       getResponse['publicAddress'],
