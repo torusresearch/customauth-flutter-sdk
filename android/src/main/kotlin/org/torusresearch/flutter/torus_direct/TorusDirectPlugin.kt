@@ -76,53 +76,91 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         when (call.method) {
             "init" -> {
                 torusDirectArgs = DirectSdkArgs(
-                    call.argument("browserRedirectUri"),
-                    TorusNetwork.valueOfLabel(call.argument("network")),
-                    call.argument("redirectUri")
+                        call.argument("browserRedirectUri"),
+                        TorusNetwork.valueOfLabel(call.argument("network")),
+                        call.argument("redirectUri")
                 )
                 Log.d(
-                    "${TorusDirectPlugin::class.qualifiedName}#init",
-                    "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
+                        "${TorusDirectPlugin::class.qualifiedName}#init",
+                        "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
                 )
                 return null
             }
             "triggerLogin" -> {
                 val torusDirectSdk =
-                    TorusDirectSdk(torusDirectArgs, activity ?: context)
+                        TorusDirectSdk(torusDirectArgs, activity ?: context)
                 val torusResponse = torusDirectSdk.triggerLogin(
-                    SubVerifierDetails(
-                        LoginType.valueOfLabel(call.argument("typeOfLogin")),
-                        call.argument<String>("verifier"),
-                        call.argument<String>("clientId"),
-                        mapJwtParams(call.argument("jwtParams")),
-                        activity == null
-                    )
+                        SubVerifierDetails(
+                                LoginType.valueOfLabel(call.argument("typeOfLogin")),
+                                call.argument<String>("verifier"),
+                                call.argument<String>("clientId"),
+                                mapJwtParams(call.argument("jwtParams")),
+                                activity == null
+                        )
                 ).join()
                 Log.d(
-                    "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
-                    "publicAddress=${torusResponse.publicAddress}"
+                        "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
+                        "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                    "publicAddress" to torusResponse.publicAddress,
-                    "privateKey" to torusResponse.privateKey
+                        "publicAddress" to torusResponse.publicAddress,
+                        "privateKey" to torusResponse.privateKey
                 )
             }
-            "getTorusKey" -> {
+            "triggerAggregateLogin" -> {
                 val torusDirectSdk =
-                    TorusDirectSdk(torusDirectArgs, activity ?: context)
-                val torusResponse = torusDirectSdk.getTorusKey(
-                    call.argument("verifier"),
-                    call.argument("verifierId"),
-                    call.argument("verifierParams"),
-                    call.argument("idToken")
+                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                val torusResponse = torusDirectSdk.triggerAggregateLogin(
+                        AggregateLoginParams(
+                                AggregateVerifierType.valueOfLabel(call.argument<String>("aggregateVerifierType")),
+                                call.argument<String>("verifierIdentifier"),
+                                (call.argument<List<Map<String, Any>?>>("subVerifierDetailsArray")!!.map { mapSubVerifierDetails(it) }).toTypedArray()
+                        )
                 ).join()
                 Log.d(
-                    "${TorusDirectPlugin::class.qualifiedName}#getTorusKey",
-                    "publicAddress=${torusResponse.publicAddress}"
+                        "${TorusDirectPlugin::class.qualifiedName}#triggerAggregateLogin",
+                        "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                    "publicAddress" to torusResponse.publicAddress,
-                    "privateKey" to torusResponse.privateKey
+                        "publicAddress" to torusResponse.publicAddress,
+                        "privateKey" to torusResponse.privateKey
+                )
+            }
+
+            "getTorusKey" -> {
+                val torusDirectSdk =
+                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                val torusResponse = torusDirectSdk.getTorusKey(
+                        call.argument("verifier"),
+                        call.argument("verifierId"),
+                        call.argument("verifierParams"),
+                        call.argument("idToken")
+                ).join()
+                Log.d(
+                        "${TorusDirectPlugin::class.qualifiedName}#getTorusKey",
+                        "publicAddress=${torusResponse.publicAddress}"
+                )
+                return mapOf(
+                        "publicAddress" to torusResponse.publicAddress,
+                        "privateKey" to torusResponse.privateKey
+                )
+            }
+
+            "getAggregateTorusKey" -> {
+                val torusDirectSdk =
+                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                val torusResponse = torusDirectSdk.getAggregateTorusKey(
+                        call.argument("verifier"),
+                        call.argument("verifierId"),
+                        (call.argument<List<Map<String, Any>?>>("subVerifierInfoArray")!!.map { mapTorusSubVerifierInfo(it) }).toTypedArray()
+                ).join()
+                Log.d(
+                        "${TorusDirectPlugin::class.qualifiedName}#getAggregateTorusKey",
+                        "publicAddress=${torusResponse.publicAddress}"
+                )
+                return mapOf(
+                        "publicAddress" to torusResponse.publicAddress,
+                        "privateKey" to torusResponse.privateKey
                 )
             }
         }
@@ -182,5 +220,31 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
 
         return builder.build()
+    }
+
+    private fun mapSubVerifierDetails(m: Map<String, Any>?): SubVerifierDetails? {
+        if (m == null) {
+            return null
+        }
+
+        return SubVerifierDetails(
+                LoginType.valueOfLabel(m["typeOfLogin"] as String),
+                m["verifier"] as String,
+                m["clientId"] as String,
+                @Suppress("UNCHECKED_CAST")
+                mapJwtParams(m["verifier"] as Map<String, Any>?),
+                activity == null
+        )
+    }
+
+    private fun mapTorusSubVerifierInfo(m: Map<String, Any>?): TorusSubVerifierInfo? {
+        if (m == null) {
+            return null
+        }
+
+        return TorusSubVerifierInfo(
+                m["verifier"] as String,
+                m["idToken"] as String
+        )
     }
 }

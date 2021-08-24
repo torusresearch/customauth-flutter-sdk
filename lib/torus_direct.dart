@@ -130,11 +130,12 @@ class TorusDirect {
     required List<SubVerifierDetails> subVerifierDetailsArray,
   }) async {
     try {
-      final String aggerateVerifierTypeString = aggerateVerifierType.toString();
+      final String aggregateVerifierTypeString =
+          aggerateVerifierType.toString();
       final Map loginResponse =
           await _channel.invokeMethod('triggerAggregateLogin', {
-        'aggerateVerifierType': aggerateVerifierTypeString
-            .substring(aggerateVerifierTypeString.lastIndexOf('.') + 1),
+        'aggregateVerifierType': aggregateVerifierTypeString
+            .substring(aggregateVerifierTypeString.lastIndexOf('.') + 1),
         'verifierIdentifier': verifierIdentifier,
         'subVerifierDetailsArray':
             subVerifierDetailsArray.map((e) => e.toMap()).toList(),
