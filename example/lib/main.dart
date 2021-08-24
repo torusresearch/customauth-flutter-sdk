@@ -53,6 +53,8 @@ class _MyAppState extends State<MyApp> {
                 onPressed: _login(_withReddit), child: Text('Reddit ')),
             ElevatedButton(
                 onPressed: _login(_withDiscord), child: Text('Discord')),
+            ElevatedButton(
+                onPressed: _login(_withAggregate), child: Text('Aggregate')),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Private key: $_privateKey'),
@@ -105,5 +107,20 @@ class _MyAppState extends State<MyApp> {
         typeOfLogin: TorusLogin.discord,
         verifier: 'discord-lrc',
         clientId: '682533837464666198');
+  }
+
+  Future<TorusCredentials> _withAggregate() {
+    return TorusDirect.triggerAggregateLogin(
+      aggerateVerifierType: AggregateVerifierType.single_id_verifier,
+      verifierIdentifier: 'chai-google-aggregate-test',
+      subVerifierDetailsArray: <SubVerifierDetails>[
+        SubVerifierDetails(
+          typeOfLogin: TorusLogin.google,
+          verifier: 'google-chai',
+          clientId:
+              '884454361223-nnlp6vtt0me9jdsm2ptg4d1dh8i0tu74.apps.googleusercontent.com',
+        ),
+      ],
+    );
   }
 }

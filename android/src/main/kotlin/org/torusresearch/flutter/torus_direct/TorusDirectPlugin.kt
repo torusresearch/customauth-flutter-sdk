@@ -232,7 +232,7 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 m["verifier"] as String,
                 m["clientId"] as String,
                 @Suppress("UNCHECKED_CAST")
-                mapJwtParams(m["verifier"] as Map<String, Any>?),
+                mapJwtParams(m["jwtParams"] as Map<String, Any>?),
                 activity == null
         )
     }
