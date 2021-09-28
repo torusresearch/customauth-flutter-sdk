@@ -19,7 +19,7 @@ enum TorusLogin {
   jwt
 }
 
-enum AggregateVerifierType { single_id_verifier }
+enum TorusAggregateVerifierType { single_id_verifier }
 
 class TorusCredentials {
   final String publicAddress;
@@ -31,13 +31,13 @@ class TorusCredentials {
   );
 }
 
-class SubVerifierDetails {
+class TorusSubVerifierDetails {
   final TorusLogin typeOfLogin;
   final String verifier;
   final String clientId;
   final Map jwtParams;
 
-  SubVerifierDetails({
+  TorusSubVerifierDetails({
     required this.typeOfLogin,
     required this.verifier,
     required this.clientId,
@@ -126,9 +126,9 @@ class TorusDirect {
   }
 
   static Future<TorusCredentials> triggerAggregateLogin({
-    required AggregateVerifierType aggerateVerifierType,
+    required TorusAggregateVerifierType aggerateVerifierType,
     required String verifierIdentifier,
-    required List<SubVerifierDetails> subVerifierDetailsArray,
+    required List<TorusSubVerifierDetails> subVerifierDetailsArray,
   }) async {
     try {
       final String aggregateVerifierTypeString =

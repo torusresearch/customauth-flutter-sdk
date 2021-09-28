@@ -67,7 +67,7 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             }
             guard let loginProvider = LoginProviders(rawValue: typeOfLogin) else {
                 result(FlutterError(
-                        code: "InvalidTypeOfLogin",
+                        code: "InvalidTypeOfLoginException",
                         message: "Invalid type of login",
                         details: nil))
                 return
@@ -120,7 +120,7 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                     rawValue: details["typeOfLogin"] as! String
                 ) else {
                     result(FlutterError(
-                            code: "InvalidTypeOfLogin",
+                            code: "InvalidTypeOfLoginException",
                             message: "Invalid type of login",
                             details: nil))
                     return

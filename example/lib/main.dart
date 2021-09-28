@@ -112,10 +112,10 @@ class _MyAppState extends State<MyApp> {
 
   Future<TorusCredentials> _withAggregate() {
     return TorusDirect.triggerAggregateLogin(
-      aggerateVerifierType: AggregateVerifierType.single_id_verifier,
+      aggerateVerifierType: TorusAggregateVerifierType.single_id_verifier,
       verifierIdentifier: 'chai-google-aggregate-test',
-      subVerifierDetailsArray: <SubVerifierDetails>[
-        SubVerifierDetails(
+      subVerifierDetailsArray: <TorusSubVerifierDetails>[
+        TorusSubVerifierDetails(
           typeOfLogin: TorusLogin.google,
           verifier: 'google-chai',
           clientId:
