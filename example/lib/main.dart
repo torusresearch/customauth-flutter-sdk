@@ -53,6 +53,8 @@ class _MyAppState extends State<MyApp> {
                 onPressed: _login(_withReddit), child: Text('Reddit ')),
             ElevatedButton(
                 onPressed: _login(_withDiscord), child: Text('Discord')),
+            ElevatedButton(
+                onPressed: _login(_withGetTorusKey), child: Text('Get Torus Key')),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text('Private key: $_privateKey'),
@@ -105,5 +107,13 @@ class _MyAppState extends State<MyApp> {
         typeOfLogin: TorusLogin.discord,
         verifier: 'discord-lrc',
         clientId: '682533837464666198');
+  }
+
+  Future<TorusCredentials> _withGetTorusKey() {
+    return TorusDirect.getTorusKey(
+      verifier: 'weact-email-password-ic-verifier',
+      verifierId: 'flutteryfi@gmail.com',
+      idToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImZLSVduR3NVNnA4ZTZ6R1lyaXBHeiJ9.eyJuaWNrbmFtZSI6ImZsdXR0ZXJ5ZmkiLCJuYW1lIjoiZmx1dHRlcnlmaUBnbWFpbC5jb20iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zLmdyYXZhdGFyLmNvbS9hdmF0YXIvMDAwYzNhZWE1YzFiYzhiOTRlMmRhOThhN2RmYzA2YWI_cz00ODAmcj1wZyZkPWh0dHBzJTNBJTJGJTJGY2RuLmF1dGgwLmNvbSUyRmF2YXRhcnMlMkZmbC5wbmciLCJ1cGRhdGVkX2F0IjoiMjAyMS0xMC0xM1QwNjoyMzowNS4wMDFaIiwiZW1haWwiOiJmbHV0dGVyeWZpQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL2Rldi1qMG4tcHR6MS5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjE0NjQzZDE5OGJjYmQwMDY4MmU2OGNhIiwiYXVkIjoiZ3o0cWlsUThNQ3ptcFlRWGc3VVIxUFRtOVVkdEQyd3kiLCJpYXQiOjE2MzQxNDI2OTUsImV4cCI6MTYzNDE3ODY5NSwiYXV0aF90aW1lIjoxNjM0MTA2MTg1fQ.XvsSckgGL8URNGzXexl8wzMNwo7bn9ppwLGwMgMFy73zFt-NbvVuj3ZP7x6erBsjNtqhB0aPmXvR3gNZBU6i-ouV_6Td2ECOsZ21e9qYef4MsUovLCWpmyU5oVxtgXcYPnOC-QxdUwgMcfE0pFcxGM3BCg37-kEUk9HEOViGt_cV0X97E-zI6g1HvrWrgq3nK405bD6yrTLmEUlXyI1hLgHFKRi4iRY1vPEcY43XryfnZRO9I0T8wIVTL4RjF6eHjNs9jPy1paR6XP5YhG8L5vhArc7fkog0o3c7QID2om5q_hRPILw39nzmn046af2H_lSV-o1F-iBS5IyN12uH3w',
+    );
   }
 }
