@@ -18,6 +18,11 @@ void main() {
   });
 
   test('init', () async {
-    await TorusDirect.init();
+    await TorusDirect.init(
+        network: TorusNetwork.testnet,
+        browserRedirectUri:
+        Uri.parse('https://scripts.toruswallet.io/redirect.html'),
+        redirectUri: Uri.parse(
+            'torusapp://org.torusresearch.torusdirectandroid/redirect'));
   });
 }

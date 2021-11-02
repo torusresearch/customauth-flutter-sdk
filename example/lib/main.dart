@@ -125,6 +125,7 @@ class _MyAppState extends State<MyApp> {
               '884454361223-nnlp6vtt0me9jdsm2ptg4d1dh8i0tu74.apps.googleusercontent.com',
         ),
       ],
+    );
   }
 
   Future<TorusCredentials> _withGetTorusKey() {

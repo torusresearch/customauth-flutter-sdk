@@ -241,50 +241,6 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             }
         default:
             result(FlutterMethodNotImplemented)
-    case "getTorusKey":
-        guard let initArgs = self.torusDirectArgs
-        else {
-            result(FlutterError(
-                code: "NotInitializedException",
-                message: "TorusDirect.init has to be called first",
-                details: nil))
-            return
-        }
-        guard
-            let verifier = args["verifier"] as? String,
-            let verifierId = args["verifierId"] as? String,
-            let idToken = args["idToken"] as? String,
-            let verifierParams = args["verifierParams"] as? Dictionary<String, String>
-        else {
-            result(FlutterError(
-                code: "MissingArgumentException",
-                message: "Missing triggerLogin arguments",
-                details: nil))
-            return
-        }
-        let subVerifierDetails = SubVerifierDetails(
-            loginType: .web,
-            loginProvider: .jwt,
-            clientId: "<empty>",
-            verifierName: verifier,
-            redirectURL: initArgs.redirectUri,
-            browserRedirectURL: "https://scripts.toruswallet.io/redirect.html",
-            extraQueryParams: [:],
-            jwtParams: [:]
-        )
-        let torusDirectSdk = TorusSwiftDirectSDK(
-            aggregateVerifierType: .singleLogin,
-            aggregateVerifierName: verifier,
-            subVerifierDetails: [subVerifierDetails]
-        )
-        torusDirectSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
-            result(data)
-        }.catch { err in
-            result(FlutterError(
-                code: "TorusErrorException",
-                message: "A TorusError from the underlying iOS SDK occured: \(err.localizedDescription)",
-                details: err.localizedDescription
-            ))
         }
     }
 }
