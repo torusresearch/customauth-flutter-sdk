@@ -91,7 +91,9 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             torusDirectSdk.triggerLogin(browserType: .external).done { data in
                 result(data)
             }.catch { err in
-                result(FlutterError())
+                result(FlutterError(
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                ))
             }
         case "triggerAggregateLogin":
             guard let initArgs = self.torusDirectArgs
@@ -145,7 +147,9 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 torusDirectSdk.triggerLogin(browserType: .external).done { data in
                     result(data)
                 }.catch { err in
-                    result(FlutterError())
+                    result(FlutterError(
+                        code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                    ))
                 }
             }
         case "getTorusKey":
@@ -187,7 +191,9 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             torusDirectSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
                 result(data)
             }.catch { err in
-                result(FlutterError())
+                result(FlutterError(
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                ))
             }
         case "getAggregateTorusKey":
             guard let initArgs = self.torusDirectArgs
@@ -237,7 +243,9 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             torusDirectSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails).done { data in
                 result(data)
             }.catch { err in
-                result(FlutterError())
+                result(FlutterError(
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                ))
             }
         default:
             result(FlutterMethodNotImplemented)
