@@ -57,7 +57,7 @@ SPEC CHECKSUMS:
   Torus-directSDK: 17d0930f7bbbae56cc2bd4983df4ed5729971f82
   Torus-fetchNodeDetails: 0978689c217448624ee6940122ad2c33a175ba55
   Torus-utils: c6b4a9cc60aa3ec97f6025d862f29488b9ff9479
-  torus_direct: 16099d8a0f3da19d1d37b33014233618dce92bd5
+  torus_direct: d56da033d5e14890370787e29b92545e347833b9
   web3.swift: ce00a5e6e39fb184e33e3622e8be22ae53205e57
 
 PODFILE CHECKSUM: a82e5b50b4e8f8df511626aded4ee39adab5fd48
