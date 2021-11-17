@@ -1,11 +1,25 @@
 import Flutter
 import UIKit
 import TorusSwiftDirectSDK
+import FetchNodeDetails
 
 struct TorusDirectArgs {
     let network: String;
     let browserRedirectUri: String;
     let redirectUri: String;
+    
+    var ethereumNetwork: EthereumNetwork {
+        get {
+            switch network {
+            case "mainnet":
+                return EthereumNetwork.MAINNET
+            case "testnet":
+                return EthereumNetwork.ROPSTEN
+            default:
+                return EthereumNetwork.ROPSTEN
+            }
+        }
+    }
 }
 
 public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
@@ -86,13 +100,14 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             let torusDirectSdk = TorusSwiftDirectSDK(
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
-                subVerifierDetails: [subVerifierDetails]
+                subVerifierDetails: [subVerifierDetails],
+                network: initArgs.ethereumNetwork
             )
             torusDirectSdk.triggerLogin(browserType: .external).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
-                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err.localizedDescription
                 ))
             }
         case "triggerAggregateLogin":
@@ -142,13 +157,14 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 let torusDirectSdk = TorusSwiftDirectSDK(
                     aggregateVerifierType: verifierTypes(rawValue: aggregateVerifierType)!,
                     aggregateVerifierName: verifierIdentifier,
-                    subVerifierDetails: castedSubVerifierDetailsArray
+                    subVerifierDetails: castedSubVerifierDetailsArray,
+                    network: initArgs.ethereumNetwork
                 )
                 torusDirectSdk.triggerLogin(browserType: .external).done { data in
                     result(data)
                 }.catch { err in
                     result(FlutterError(
-                        code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                        code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err.localizedDescription
                     ))
                 }
             }
@@ -186,13 +202,14 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             let torusDirectSdk = TorusSwiftDirectSDK(
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
-                subVerifierDetails: [subVerifierDetails]
+                subVerifierDetails: [subVerifierDetails],
+                network: initArgs.ethereumNetwork
             )
             torusDirectSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
-                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err.localizedDescription
                 ))
             }
         case "getAggregateTorusKey":
@@ -238,13 +255,14 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
             let torusDirectSdk = TorusSwiftDirectSDK(
                 aggregateVerifierType: .singleIdVerifier,
                 aggregateVerifierName: verifier,
-                subVerifierDetails: [subVerifierDetails]
+                subVerifierDetails: [subVerifierDetails],
+                network: initArgs.ethereumNetwork
             )
             torusDirectSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
-                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err
+                    code: "IosSdkError", message: "Error from iOS SDK: \(err.localizedDescription)", details: err.localizedDescription
                 ))
             }
         default:
