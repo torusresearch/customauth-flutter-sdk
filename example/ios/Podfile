@@ -29,7 +29,7 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-  pod 'web3swift', :git => 'https://github.com/lvyikai/web3swift.git', :branch => 'develop' # Workaround outdated CryptoSwift in web3swift
+  # pod 'web3swift', :git => 'https://github.com/lvyikai/web3swift.git', :branch => 'develop' # Workaround outdated CryptoSwift in web3swift
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
