@@ -1,4 +1,4 @@
-package org.torusresearch.flutter.torus_direct_example
+package org.torusresearch.flutter.customauth_example
 
 import io.flutter.embedding.android.FlutterActivity
 

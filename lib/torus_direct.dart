@@ -78,7 +78,7 @@ class UserCancelledException implements Exception {}
 class NoAllowedBrowserFoundException implements Exception {}
 
 class TorusDirect {
-  static const MethodChannel _channel = const MethodChannel('torus_direct');
+  static const MethodChannel _channel = const MethodChannel('customauth');
 
   static Future<void> init({
     required TorusNetwork network,

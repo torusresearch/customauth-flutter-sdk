@@ -1,4 +1,4 @@
-package org.torusresearch.flutter.torus_direct
+package org.torusresearch.flutter.customauth
 
 import android.app.Activity
 import android.content.Context
@@ -10,16 +10,15 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.torusresearch.torusdirect.TorusDirectSdk
-import org.torusresearch.torusdirect.types.*
-import org.torusresearch.torusdirect.utils.Helpers.unwrapCompletionException
+import org.torusresearch.customauth.CustomAuth
+import org.torusresearch.customauth.types.*
+import org.torusresearch.customauth.utils.Helpers.unwrapCompletionException
 
 /** TorusDirectPlugin */
-class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
+class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -28,10 +27,10 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
 
     private var activity: Activity? = null
     private lateinit var context: Context
-    private lateinit var torusDirectArgs: DirectSdkArgs
+    private lateinit var torusDirectArgs: CustomAuthArgs
 
     override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(binding.binaryMessenger, "torus_direct")
+        channel = MethodChannel(binding.binaryMessenger, "customauth")
         channel.setMethodCallHandler(this)
         context = binding.applicationContext
     }
@@ -75,92 +74,116 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     private fun runMethodCall(@NonNull call: MethodCall): Any? {
         when (call.method) {
             "init" -> {
-                torusDirectArgs = DirectSdkArgs(
-                        call.argument("browserRedirectUri"),
-                        TorusNetwork.valueOfLabel(call.argument("network")),
-                        call.argument("redirectUri")
+                torusDirectArgs = CustomAuthArgs(
+                    call.argument("browserRedirectUri"),
+                    TorusNetwork.valueOfLabel(call.argument("network")),
+                    call.argument("redirectUri")
                 )
                 Log.d(
-                        "${TorusDirectPlugin::class.qualifiedName}#init",
-                        "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
+                    "${CustomAuthPlugin::class.qualifiedName}#init",
+                    "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
                 )
                 return null
             }
             "triggerLogin" -> {
                 val torusDirectSdk =
-                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                    CustomAuth(torusDirectArgs, activity ?: context)
                 val torusResponse = torusDirectSdk.triggerLogin(
-                        SubVerifierDetails(
-                                LoginType.valueOfLabel(call.argument("typeOfLogin")),
-                                call.argument<String>("verifier"),
-                                call.argument<String>("clientId"),
-                                mapJwtParams(call.argument("jwtParams")),
-                                activity == null
-                        )
+                    SubVerifierDetails(
+                        LoginType.valueOfLabel(call.argument("typeOfLogin")),
+                        call.argument<String>("verifier"),
+                        call.argument<String>("clientId"),
+                        mapJwtParams(call.argument("jwtParams")),
+                        activity == null
+                    )
                 ).join()
                 Log.d(
-                        "${TorusDirectPlugin::class.qualifiedName}#triggerLogin",
-                        "publicAddress=${torusResponse.publicAddress}"
+                    "${CustomAuthPlugin::class.qualifiedName}#triggerLogin",
+                    "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                        "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey,
+                    "userInfo" to mapOf(
+                        "email" to torusResponse.userInfo.email,
+                        "name" to torusResponse.userInfo.name,
+                        "profileImage" to torusResponse.userInfo.profileImage,
+                        "verifier" to torusResponse.userInfo.verifier,
+                        "verifierId" to torusResponse.userInfo.verifierId,
+                        "typeOfLogin" to torusResponse.userInfo.typeOfLogin,
+                        "accessToken" to torusResponse.userInfo.accessToken,
+                        "idToken" to torusResponse.userInfo.idToken
+                    )
                 )
             }
             "triggerAggregateLogin" -> {
                 val torusDirectSdk =
-                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                    CustomAuth(torusDirectArgs, activity ?: context)
                 val torusResponse = torusDirectSdk.triggerAggregateLogin(
-                        AggregateLoginParams(
-                                AggregateVerifierType.valueOfLabel(call.argument<String>("aggregateVerifierType")),
-                                call.argument<String>("verifierIdentifier"),
-                                (call.argument<List<Map<String, Any>?>>("subVerifierDetailsArray")!!.map { mapSubVerifierDetails(it) }).toTypedArray()
-                        )
+                    AggregateLoginParams(
+                        AggregateVerifierType.valueOfLabel(call.argument<String>("aggregateVerifierType")),
+                        call.argument<String>("verifierIdentifier"),
+                        (call.argument<List<Map<String, Any>?>>("subVerifierDetailsArray")!!
+                            .map { mapSubVerifierDetails(it) }).toTypedArray()
+                    )
                 ).join()
                 Log.d(
-                        "${TorusDirectPlugin::class.qualifiedName}#triggerAggregateLogin",
-                        "publicAddress=${torusResponse.publicAddress}"
+                    "${CustomAuthPlugin::class.qualifiedName}#triggerAggregateLogin",
+                    "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                        "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey,
+                    "userInfo" to listOf(
+                        mapOf(
+                            "email" to torusResponse.userInfo[0].email,
+                            "name" to torusResponse.userInfo[0].name,
+                            "profileImage" to torusResponse.userInfo[0].profileImage,
+                            "verifier" to torusResponse.userInfo[0].verifier,
+                            "verifierId" to torusResponse.userInfo[0].verifierId,
+                            "typeOfLogin" to torusResponse.userInfo[0].typeOfLogin,
+                            "accessToken" to torusResponse.userInfo[0].accessToken,
+                            "idToken" to torusResponse.userInfo[0].idToken
+                        )
+                    )
                 )
             }
 
             "getTorusKey" -> {
                 val torusDirectSdk =
-                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                    CustomAuth(torusDirectArgs, activity ?: context)
                 val torusResponse = torusDirectSdk.getTorusKey(
-                        call.argument("verifier"),
-                        call.argument("verifierId"),
-                        call.argument("verifierParams"),
-                        call.argument("idToken")
+                    call.argument("verifier"),
+                    call.argument("verifierId"),
+                    call.argument("verifierParams"),
+                    call.argument("idToken")
                 ).join()
                 Log.d(
-                        "${TorusDirectPlugin::class.qualifiedName}#getTorusKey",
-                        "publicAddress=${torusResponse.publicAddress}"
+                    "${CustomAuthPlugin::class.qualifiedName}#getTorusKey",
+                    "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                        "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey
                 )
             }
 
             "getAggregateTorusKey" -> {
                 val torusDirectSdk =
-                        TorusDirectSdk(torusDirectArgs, activity ?: context)
+                    CustomAuth(torusDirectArgs, activity ?: context)
                 val torusResponse = torusDirectSdk.getAggregateTorusKey(
-                        call.argument("verifier"),
-                        call.argument("verifierId"),
-                        (call.argument<List<Map<String, Any>?>>("subVerifierInfoArray")!!.map { mapTorusSubVerifierInfo(it) }).toTypedArray()
+                    call.argument("verifier"),
+                    call.argument("verifierId"),
+                    (call.argument<List<Map<String, Any>?>>("subVerifierInfoArray")!!
+                        .map { mapTorusSubVerifierInfo(it) }).toTypedArray()
                 ).join()
                 Log.d(
-                        "${TorusDirectPlugin::class.qualifiedName}#getAggregateTorusKey",
-                        "publicAddress=${torusResponse.publicAddress}"
+                    "${CustomAuthPlugin::class.qualifiedName}#getAggregateTorusKey",
+                    "publicAddress=${torusResponse.publicAddress}"
                 )
                 return mapOf(
-                        "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                    "publicAddress" to torusResponse.publicAddress,
+                    "privateKey" to torusResponse.privateKey
                 )
             }
         }
@@ -228,12 +251,12 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
 
         return SubVerifierDetails(
-                LoginType.valueOfLabel(m["typeOfLogin"] as String),
-                m["verifier"] as String,
-                m["clientId"] as String,
-                @Suppress("UNCHECKED_CAST")
-                mapJwtParams(m["jwtParams"] as Map<String, Any>?),
-                activity == null
+            LoginType.valueOfLabel(m["typeOfLogin"] as String),
+            m["verifier"] as String,
+            m["clientId"] as String,
+            @Suppress("UNCHECKED_CAST")
+            mapJwtParams(m["jwtParams"] as Map<String, Any>?),
+            activity == null
         )
     }
 
@@ -243,8 +266,8 @@ class TorusDirectPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         }
 
         return TorusSubVerifierInfo(
-                m["verifier"] as String,
-                m["idToken"] as String
+            m["verifier"] as String,
+            m["idToken"] as String
         )
     }
 }

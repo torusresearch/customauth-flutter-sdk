@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:torus_direct/torus_direct.dart';
+import 'package:customauth/customauth.dart';
 
 void main() {
   runApp(MyApp());
