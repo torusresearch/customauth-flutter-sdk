@@ -55,7 +55,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
         activity = null
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val response = runMethodCall(call)
@@ -110,7 +110,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                                 "profileImage" to torusResponse.userInfo.profileImage,
                                 "verifier" to torusResponse.userInfo.verifier,
                                 "verifierId" to torusResponse.userInfo.verifierId,
-                                "typeOfLogin" to torusResponse.userInfo.typeOfLogin,
+                                "typeOfLogin" to torusResponse.userInfo.typeOfLogin.name,
                                 "accessToken" to torusResponse.userInfo.accessToken,
                                 "idToken" to torusResponse.userInfo.idToken
                         ))
@@ -134,18 +134,18 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 return mapOf(
                         "publicAddress" to torusResponse.publicAddress,
                         "privateKey" to torusResponse.privateKey,
-                        "userInfo" to torusResponse.userInfo.map(
-                                mapOf(
-                                        "email" to it.email,
-                                        "name" to it.name,
-                                        "profileImage" to it.profileImage,
-                                        "verifier" to it.verifier,
-                                        "verifierId" to it.verifierId,
-                                        "typeOfLogin" to it.typeOfLogin,
-                                        "accessToken" to it.accessToken,
-                                        "idToken" to it.idToken
-                                )
-                        )
+                        "userInfo" to torusResponse.userInfo.map {
+                            mapOf(
+                                "email" to it.email,
+                                "name" to it.name,
+                                "profileImage" to it.profileImage,
+                                "verifier" to it.verifier,
+                                "verifierId" to it.verifierId,
+                                "typeOfLogin" to it.typeOfLogin.name,
+                                "accessToken" to it.accessToken,
+                                "idToken" to it.idToken
+                            )
+                        }
 
                 )
             }

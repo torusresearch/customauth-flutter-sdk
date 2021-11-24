@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/services.dart';
 
@@ -136,18 +137,21 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
-        loginResponse['userInfo'] == null ? [] : (loginResponse['userInfo'] as List<Map>)
-            .map((e) => TorusUserInfo(
-                  email: e['email'],
-                  name: e['name'],
-                  profileImage: e['profileImage'],
-                  verifier: e['verifier'],
-                  verifierId: e['verifierId'],
-                  typeOfLogin: e['typeOfLogin'],
-                  accessToken: e['accessToken'],
-                  idToken: e['idToken'],
-                ))
-            .toList(),
+        loginResponse['userInfo'] == null
+            ? []
+            : (loginResponse['userInfo'] as List<dynamic>)
+                .whereType<Map>()
+                .map((e) => TorusUserInfo(
+                      email: e['email'],
+                      name: e['name'],
+                      profileImage: e['profileImage'],
+                      verifier: e['verifier'],
+                      verifierId: e['verifierId'],
+                      typeOfLogin: e['typeOfLogin'],
+                      accessToken: e['accessToken'],
+                      idToken: e['idToken'],
+                    ))
+                .toList(),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -180,18 +184,21 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
-        loginResponse['userInfo'] == null ? [] :(loginResponse['userInfo'] as List<Map>)
-            .map((e) => TorusUserInfo(
-                  email: e['email'],
-                  name: e['name'],
-                  profileImage: e['profileImage'],
-                  verifier: e['verifier'],
-                  verifierId: e['verifierId'],
-                  typeOfLogin: e['typeOfLogin'],
-                  accessToken: e['accessToken'],
-                  idToken: e['idToken'],
-                ))
-            .toList(),
+        loginResponse['userInfo'] == null
+            ? []
+            : (loginResponse['userInfo'] as List<dynamic>)
+                .whereType<Map>()
+                .map((e) => TorusUserInfo(
+                      email: e['email'],
+                      name: e['name'],
+                      profileImage: e['profileImage'],
+                      verifier: e['verifier'],
+                      verifierId: e['verifierId'],
+                      typeOfLogin: e['typeOfLogin'],
+                      accessToken: e['accessToken'],
+                      idToken: e['idToken'],
+                    ))
+                .toList(),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
