@@ -24,7 +24,7 @@ struct TorusDirectArgs {
 
 public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "torus_direct", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "customauth", binaryMessenger: registrar.messenger())
         let instance = SwiftTorusDirectPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }

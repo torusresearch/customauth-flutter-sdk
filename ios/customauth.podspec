@@ -3,7 +3,7 @@
 # Run `pod lib lint torus_direct.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'torus_direct'
+  s.name             = 'customauth'
   s.version          = '0.0.2'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC

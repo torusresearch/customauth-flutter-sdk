@@ -30,7 +30,7 @@ flutter:
         package: org.torusresearch.flutter.customauth
         pluginClass: CustomAuthPlugin
       ios:
-        pluginClass: CustomAuthPlugin
+        pluginClass: TorusDirectPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
