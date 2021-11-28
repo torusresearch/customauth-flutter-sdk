@@ -41,7 +41,7 @@ android {
         versionName flutterVersionName
         manifestPlaceholders = [
             'torusRedirectScheme': 'torusapp',
-            'torusRedirectHost': 'org.torusresearch.torusdirectandroid',
+            'torusRedirectHost': 'org.torusresearch.customauthandroid',
             'torusRedirectPathPrefix': '/redirect'
         ]
     }
