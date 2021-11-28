@@ -75,7 +75,6 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           _privateKey = credentials.privateKey;
         });
-        print("userInfo: ${credentials.userInfo}");
       } on UserCancelledException {
         print("User cancelled.");
       } on NoAllowedBrowserFoundException {

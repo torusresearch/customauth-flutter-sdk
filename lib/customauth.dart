@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:flutter/services.dart';
 
@@ -35,14 +34,14 @@ class TorusCredentials {
 }
 
 class TorusUserInfo {
-  final String email;
-  final String name;
-  final String profileImage;
-  final String verifier;
-  final String verifierId;
-  final String typeOfLogin;
-  final String accessToken;
-  final String idToken;
+  final String? email;
+  final String? name;
+  final String? profileImage;
+  final String? verifier;
+  final String? verifierId;
+  final String? typeOfLogin;
+  final String? accessToken;
+  final String? idToken;
 
   const TorusUserInfo({
     required this.email,
@@ -137,21 +136,7 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
-        loginResponse['userInfo'] == null
-            ? []
-            : (loginResponse['userInfo'] as List<dynamic>)
-                .whereType<Map>()
-                .map((e) => TorusUserInfo(
-                      email: e['email'],
-                      name: e['name'],
-                      profileImage: e['profileImage'],
-                      verifier: e['verifier'],
-                      verifierId: e['verifierId'],
-                      typeOfLogin: e['typeOfLogin'],
-                      accessToken: e['accessToken'],
-                      idToken: e['idToken'],
-                    ))
-                .toList(),
+        _convertUserInfo(loginResponse['userInfo']),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -184,21 +169,7 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
-        loginResponse['userInfo'] == null
-            ? []
-            : (loginResponse['userInfo'] as List<dynamic>)
-                .whereType<Map>()
-                .map((e) => TorusUserInfo(
-                      email: e['email'],
-                      name: e['name'],
-                      profileImage: e['profileImage'],
-                      verifier: e['verifier'],
-                      verifierId: e['verifierId'],
-                      typeOfLogin: e['typeOfLogin'],
-                      accessToken: e['accessToken'],
-                      idToken: e['idToken'],
-                    ))
-                .toList(),
+        _convertUserInfo(loginResponse['userInfo']),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -246,5 +217,42 @@ class TorusDirect {
     });
     return TorusCredentials(
         getResponse['publicAddress'], getResponse['privateKey'], []);
+  }
+
+  static List<TorusUserInfo> _convertUserInfo(dynamic obj) {
+    if (obj == null) {
+      return [];
+    }
+    if (obj is List<dynamic>) {
+      return obj
+          .whereType<Map>()
+          .map((e) => TorusUserInfo(
+                email: e['email'],
+                name: e['name'],
+                profileImage: e['profileImage'],
+                verifier: e['verifier'],
+                verifierId: e['verifierId'],
+                typeOfLogin: e['typeOfLogin'],
+                accessToken: e['accessToken'],
+                idToken: e['idToken'],
+              ))
+          .toList();
+    }
+    if (obj is Map) {
+      final Map e = obj;
+      return [
+        TorusUserInfo(
+          email: e['email'],
+          name: e['name'],
+          profileImage: e['profileImage'],
+          verifier: e['verifier'],
+          verifierId: e['verifierId'],
+          typeOfLogin: e['typeOfLogin'],
+          accessToken: e['accessToken'],
+          idToken: e['idToken'],
+        )
+      ];
+    }
+    throw Exception("incorrect userInfo format");
   }
 }
