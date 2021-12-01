@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:customauth/customauth.dart';
+import 'package:customauth_flutter/customauth.dart';
 
 void main() {
   runApp(MyApp());

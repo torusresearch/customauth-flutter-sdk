@@ -11,6 +11,6 @@
 @implementation CustomAuthPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     // Should be SwiftCustomAuthPlugin in the next line, somehow not working.
-  [CustomAuthPlugin registerWithRegistrar:registrar];
+  [SwiftCustomAuthPlugin registerWithRegistrar:registrar];
 }
 @end
