@@ -1,9 +1,9 @@
 import Flutter
 import UIKit
-import TorusSwiftDirectSDK
+import CustomAuth
 import FetchNodeDetails
 
-struct TorusDirectArgs {
+struct CustomAuthArgs {
     let network: String;
     let browserRedirectUri: String;
     let redirectUri: String;
@@ -22,14 +22,14 @@ struct TorusDirectArgs {
     }
 }
 
-public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
+public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "customauth", binaryMessenger: registrar.messenger())
-        let instance = SwiftTorusDirectPlugin()
+        let instance = SwiftCustomAuthPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
-    var torusDirectArgs: TorusDirectArgs? = nil
+    var customAuthArgs: CustomAuthArgs? = nil
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? Dictionary<String, Any> else {
@@ -52,18 +52,18 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                         details: nil))
                 return
             }
-            self.torusDirectArgs = TorusDirectArgs(
+            self.customAuthArgs = CustomAuthArgs(
                 network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri)
-            print("TorusDirectPlugin#init: " +
+            print("CustomAuthPlugin#init: " +
                     "network=\(network), " +
                     "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri)")
             result(nil)
         case "triggerLogin":
-            guard let initArgs = self.torusDirectArgs
+            guard let initArgs = self.customAuthArgs
             else {
                 result(FlutterError(
                         code: "NotInitializedException",
-                        message: "TorusDirect.init has to be called first",
+                        message: "CustomAuth.init has to be called first",
                         details: nil))
                 return
             }
@@ -97,13 +97,13 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 extraQueryParams: [:],
                 jwtParams: jwtParams ?? [:]
             )
-            let torusDirectSdk = TorusSwiftDirectSDK(
+            let customAuthSdk = CustomAuth(
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
                 network: initArgs.ethereumNetwork
             )
-            torusDirectSdk.triggerLogin(browserType: .external).done { data in
+            customAuthSdk.triggerLogin(browserType: .external).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
@@ -111,7 +111,7 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 ))
             }
         case "triggerAggregateLogin":
-            guard let initArgs = self.torusDirectArgs
+            guard let initArgs = self.customAuthArgs
             else {
                 result(FlutterError(
                         code: "NotInitializedException",
@@ -154,13 +154,13 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                         jwtParams: jwtParams ?? [:]
                     )
                 )
-                let torusDirectSdk = TorusSwiftDirectSDK(
+                let customAuthSdk = CustomAuth(
                     aggregateVerifierType: verifierTypes(rawValue: aggregateVerifierType)!,
                     aggregateVerifierName: verifierIdentifier,
                     subVerifierDetails: castedSubVerifierDetailsArray,
                     network: initArgs.ethereumNetwork
                 )
-                torusDirectSdk.triggerLogin(browserType: .external).done { data in
+                customAuthSdk.triggerLogin(browserType: .external).done { data in
                     result(data)
                 }.catch { err in
                     result(FlutterError(
@@ -169,11 +169,11 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 }
             }
         case "getTorusKey":
-            guard let initArgs = self.torusDirectArgs
+            guard let initArgs = self.customAuthArgs
             else {
                 result(FlutterError(
                         code: "NotInitializedException",
-                        message: "TorusDirect.init has to be called first",
+                        message: "CustomAuth.init has to be called first",
                         details: nil))
                 return
             }
@@ -199,13 +199,13 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 extraQueryParams: [:],
                 jwtParams: [:]
             )
-            let torusDirectSdk = TorusSwiftDirectSDK(
+            let customAuthSdk = CustomAuth(
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
                 network: initArgs.ethereumNetwork
             )
-            torusDirectSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
+            customAuthSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
@@ -213,11 +213,11 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 ))
             }
         case "getAggregateTorusKey":
-            guard let initArgs = self.torusDirectArgs
+            guard let initArgs = self.customAuthArgs
             else {
                 result(FlutterError(
                         code: "NotInitializedException",
-                        message: "TorusDirect.init has to be called first",
+                        message: "CustomAuth.init has to be called first",
                         details: nil))
                 return
             }
@@ -252,13 +252,13 @@ public class SwiftTorusDirectPlugin: NSObject, FlutterPlugin {
                 extraQueryParams: [:],
                 jwtParams: [:]
             )
-            let torusDirectSdk = TorusSwiftDirectSDK(
+            let customAuthSdk = CustomAuth(
                 aggregateVerifierType: .singleIdVerifier,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
                 network: initArgs.ethereumNetwork
             )
-            torusDirectSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails).done { data in
+            customAuthSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails).done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(

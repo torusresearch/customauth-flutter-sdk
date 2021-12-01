@@ -3,11 +3,11 @@
 # Run `pod lib lint torus_direct.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'customauth'
-  s.version          = '0.0.2'
+  s.name             = 'customauth_flutter'
+  s.version          = '1.0.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
-  Flutter plugin on torus-direct-swift-sdk
+  Flutter plugin for CustomAuth.
                        DESC
   s.homepage         = 'https://app.tor.us'
   s.license          = { :file => '../LICENSE' }
@@ -15,8 +15,8 @@ Pod::Spec.new do |s|
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'Torus-directSDK', '~> 1.1.3'
-  s.platform = :ios, '11.0'
+  s.dependency 'CustomAuth', '~> 2.0.0'
+  s.platform = :ios, '13.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

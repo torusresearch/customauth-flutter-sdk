@@ -1,4 +1,4 @@
-#import "TorusDirectPlugin.h"
+#import "CustomAuthPlugin.h"
 #if __has_include(<customauth/customauth-Swift.h>)
 #import <customauth/customauth-Swift.h>
 #else
@@ -8,8 +8,9 @@
 #import "customauth-Swift.h"
 #endif
 
-@implementation TorusDirectPlugin
+@implementation CustomAuthPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftTorusDirectPlugin registerWithRegistrar:registrar];
+    // Should be SwiftCustomAuthPlugin in the next line, somehow not working.
+  [CustomAuthPlugin registerWithRegistrar:registrar];
 }
 @end

@@ -1,4 +1,4 @@
-name: customauth
+name: customauth_flutter
 description: Torus CustomAuth SDK for Flutter applications.
 version: 2.0.0
 homepage: https://tor.us
@@ -30,7 +30,7 @@ flutter:
         package: org.torusresearch.flutter.customauth
         pluginClass: CustomAuthPlugin
       ios:
-        pluginClass: TorusDirectPlugin
+        pluginClass: CustomAuthPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
