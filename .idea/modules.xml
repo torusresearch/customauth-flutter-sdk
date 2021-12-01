@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/torus_direct.iml" filepath="$PROJECT_DIR$/torus_direct.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/torus_direct_android.iml" filepath="$PROJECT_DIR$/android/torus_direct_android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/android/torus_direct_example_android.iml" filepath="$PROJECT_DIR$/example/android/torus_direct_example_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/customauth.iml" filepath="$PROJECT_DIR$/customauth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/customauth_android.iml" filepath="$PROJECT_DIR$/android/customauth_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/android/customauth_example_android.iml" filepath="$PROJECT_DIR$/example/android/customauth_example_android.iml" />
     </modules>
   </component>
 </project>
