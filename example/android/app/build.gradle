@@ -40,8 +40,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders = [
-            'torusRedirectScheme': 'torusapp',
-            'torusRedirectHost': 'org.torusresearch.customauthandroid',
+            'torusRedirectScheme': 'torus',
+            'torusRedirectHost': 'org.torusresearch.sample',
             'torusRedirectPathPrefix': '/redirect'
         ]
     }

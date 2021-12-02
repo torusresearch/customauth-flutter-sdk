@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
         browserRedirectUri:
             Uri.parse('https://scripts.toruswallet.io/redirect.html'),
         redirectUri: Uri.parse(
-            'torusapp://org.torusresearch.customauthandroid/redirect'));
+            'torus://org.torusresearch.sample/redirect'));
   }
 
   @override
