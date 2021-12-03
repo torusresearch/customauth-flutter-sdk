@@ -24,11 +24,35 @@ enum TorusAggregateVerifierType { single_id_verifier }
 class TorusCredentials {
   final String publicAddress;
   final String privateKey;
+  final List<TorusUserInfo> userInfo;
 
   TorusCredentials(
     this.publicAddress,
     this.privateKey,
+    this.userInfo,
   );
+}
+
+class TorusUserInfo {
+  final String? email;
+  final String? name;
+  final String? profileImage;
+  final String? verifier;
+  final String? verifierId;
+  final String? typeOfLogin;
+  final String? accessToken;
+  final String? idToken;
+
+  const TorusUserInfo({
+    required this.email,
+    required this.name,
+    required this.profileImage,
+    required this.verifier,
+    required this.verifierId,
+    required this.typeOfLogin,
+    required this.accessToken,
+    required this.idToken,
+  });
 }
 
 class TorusSubVerifierDetails {
@@ -77,8 +101,8 @@ class UserCancelledException implements Exception {}
 
 class NoAllowedBrowserFoundException implements Exception {}
 
-class TorusDirect {
-  static const MethodChannel _channel = const MethodChannel('torus_direct');
+class CustomAuth {
+  static const MethodChannel _channel = const MethodChannel('customauth');
 
   static Future<void> init({
     required TorusNetwork network,
@@ -112,6 +136,7 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
+        _convertUserInfo(loginResponse['userInfo']),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -144,6 +169,7 @@ class TorusDirect {
       return TorusCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
+        _convertUserInfo(loginResponse['userInfo']),
       );
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -174,9 +200,7 @@ class TorusDirect {
       'verifierParams': mergedVerfierParams
     });
     return TorusCredentials(
-      getResponse['publicAddress'],
-      getResponse['privateKey'],
-    );
+        getResponse['publicAddress'], getResponse['privateKey'], []);
   }
 
   static Future<TorusCredentials> getAggregateTorusKey({
@@ -192,8 +216,43 @@ class TorusDirect {
           subVerifierInfoArray.map((e) => e.toMap()).toList(),
     });
     return TorusCredentials(
-      getResponse['publicAddress'],
-      getResponse['privateKey'],
-    );
+        getResponse['publicAddress'], getResponse['privateKey'], []);
+  }
+
+  static List<TorusUserInfo> _convertUserInfo(dynamic obj) {
+    if (obj == null) {
+      return [];
+    }
+    if (obj is List<dynamic>) {
+      return obj
+          .whereType<Map>()
+          .map((e) => TorusUserInfo(
+                email: e['email'],
+                name: e['name'],
+                profileImage: e['profileImage'],
+                verifier: e['verifier'],
+                verifierId: e['verifierId'],
+                typeOfLogin: e['typeOfLogin'],
+                accessToken: e['accessToken'],
+                idToken: e['idToken'],
+              ))
+          .toList();
+    }
+    if (obj is Map) {
+      final Map e = obj;
+      return [
+        TorusUserInfo(
+          email: e['email'],
+          name: e['name'],
+          profileImage: e['profileImage'],
+          verifier: e['verifier'],
+          verifierId: e['verifierId'],
+          typeOfLogin: e['typeOfLogin'],
+          accessToken: e['accessToken'],
+          idToken: e['idToken'],
+        )
+      ];
+    }
+    throw Exception("incorrect userInfo format");
   }
 }

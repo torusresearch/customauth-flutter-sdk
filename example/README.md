@@ -1,6 +1,6 @@
-# torus_direct_example
+# customauth_example
 
-Demonstrates how to use the torus_direct plugin.
+Demonstrates how to use the customauth plugin.
 
 ## Getting Started
 

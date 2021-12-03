@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-import TorusSwiftDirectSDK
+import CustomAuth
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -13,7 +13,7 @@ import TorusSwiftDirectSDK
   }
     
   override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-    TorusSwiftDirectSDK.handle(url: url)
+    CustomAuth.handle(url: url)
     return true
   }
 }

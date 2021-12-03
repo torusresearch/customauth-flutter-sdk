@@ -1,4 +1,4 @@
-# torus_direct
+# customauth
 
 Torus CustomAuth SDK for Flutter applications.
 
@@ -8,10 +8,10 @@ Checkout [`example/`](/example).
 
 ## Usage
 
-Add `torus_direct` package to your pubspec and import the package:
+Add `customauth` package to your pubspec and import the package:
 
 ```dart
-import 'package:torus_direct/torus_direct.dart';
+import 'package:customauth/customauth.dart';
 ```
 
 Decide which OAuth provider you'll being using. See [Torus CustomAuth supported OAuth providers](https://docs.tor.us/customauth/supported-authenticators-verifiers).
@@ -85,7 +85,7 @@ import TorusSwiftDirectSDK
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-    
+
   // Handle redirect URL and send to Torus Direct instance
   override func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
     TorusSwiftDirectSDK.handle(url: url)
