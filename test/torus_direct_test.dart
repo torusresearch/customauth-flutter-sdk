@@ -18,7 +18,7 @@ void main() {
   });
 
   test('init', () async {
-    await TorusDirect.init(
+    await CustomAuth.init(
         network: TorusNetwork.testnet,
         browserRedirectUri:
         Uri.parse('https://scripts.toruswallet.io/redirect.html'),
