@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/customauth.iml" filepath="$PROJECT_DIR$/.idea/modules/customauth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/customauth.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/customauth.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/customauth.main.iml" filepath="$PROJECT_DIR$/.idea/modules/customauth.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/customauth.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/customauth.unitTest.iml" />
+    </modules>
+  </component>
+</project>
