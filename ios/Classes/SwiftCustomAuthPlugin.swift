@@ -7,16 +7,19 @@ struct CustomAuthArgs {
     let network: String;
     let browserRedirectUri: String;
     let redirectUri: String;
+    let enableOneKey: Bool;
     
-    var ethereumNetwork: EthereumNetwork {
+    var ethereumNetwork: EthereumNetworkFND {
         get {
             switch network {
             case "mainnet":
-                return EthereumNetwork.MAINNET
+                return EthereumNetworkFND.MAINNET
             case "testnet":
-                return EthereumNetwork.ROPSTEN
+                return EthereumNetworkFND.ROPSTEN
+            case "cyan":
+                return EthereumNetworkFND.POLYGON
             default:
-                return EthereumNetwork.ROPSTEN
+                return EthereumNetworkFND.MAINNET
             }
         }
     }
@@ -44,7 +47,8 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
             guard
                 let network = args["network"] as? String,
                 let browserRedirectUri = args["browserRedirectUri"] as? String,
-                let redirectUri = args["redirectUri"] as? String
+                let redirectUri = args["redirectUri"] as? String,
+                let enableOneKey = args["enableOneKey"] as? Bool
             else {
                 result(FlutterError(
                         code: "MISSING_ARGUMENTS",
@@ -53,10 +57,10 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 return
             }
             self.customAuthArgs = CustomAuthArgs(
-                network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri)
+                network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey)
             print("CustomAuthPlugin#init: " +
                     "network=\(network), " +
-                    "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri)")
+                    "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey)")
             result(nil)
         case "triggerLogin":
             guard let initArgs = self.customAuthArgs
@@ -94,7 +98,6 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 verifierName: verifier,
                 redirectURL: initArgs.redirectUri,
                 browserRedirectURL: initArgs.browserRedirectUri,
-                extraQueryParams: [:],
                 jwtParams: jwtParams ?? [:]
             )
             let customAuthSdk = CustomAuth(
@@ -103,7 +106,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 subVerifierDetails: [subVerifierDetails],
                 network: initArgs.ethereumNetwork
             )
-            customAuthSdk.triggerLogin(browserType: .external).done { data in
+            customAuthSdk.triggerLogin().done { data in
                 result(data)
             }.catch { err in
                 result(FlutterError(
@@ -150,7 +153,6 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                         verifierName: details["verifier"] as! String,
                         redirectURL: initArgs.redirectUri,
                         browserRedirectURL: initArgs.browserRedirectUri,
-                        extraQueryParams: [:],
                         jwtParams: jwtParams ?? [:]
                     )
                 )
@@ -160,7 +162,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     subVerifierDetails: castedSubVerifierDetailsArray,
                     network: initArgs.ethereumNetwork
                 )
-                customAuthSdk.triggerLogin(browserType: .external).done { data in
+                customAuthSdk.triggerLogin().done { data in
                     result(data)
                 }.catch { err in
                     result(FlutterError(
@@ -195,8 +197,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 clientId: "<empty>",
                 verifierName: verifier,
                 redirectURL: initArgs.redirectUri,
-                browserRedirectURL: "https://scripts.toruswallet.io/redirect.html",
-                extraQueryParams: [:],
+                browserRedirectURL: initArgs.browserRedirectUri,
                 jwtParams: [:]
             )
             let customAuthSdk = CustomAuth(
@@ -248,8 +249,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 clientId: "<empty>",
                 verifierName: sviaVerifier == "" ? verifier : sviaVerifier,
                 redirectURL: initArgs.redirectUri,
-                browserRedirectURL: "https://scripts.toruswallet.io/redirect.html",
-                extraQueryParams: [:],
+                browserRedirectURL: initArgs.browserRedirectUri,
                 jwtParams: [:]
             )
             let customAuthSdk = CustomAuth(

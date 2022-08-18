@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-enum TorusNetwork { mainnet, testnet }
+enum TorusNetwork { mainnet, testnet, cyan }
 
 enum TorusLogin {
   google,
@@ -104,17 +104,18 @@ class NoAllowedBrowserFoundException implements Exception {}
 class CustomAuth {
   static const MethodChannel _channel = const MethodChannel('customauth');
 
-  static Future<void> init({
-    required TorusNetwork network,
-    required Uri redirectUri,
-    Uri? browserRedirectUri,
-  }) async {
+  static Future<void> init(
+      {required TorusNetwork network,
+      required Uri redirectUri,
+      Uri? browserRedirectUri,
+      bool? enableOneKey}) async {
     final String networkString = network.toString();
     final Uri mergedBrowserRedirectUri = browserRedirectUri ?? redirectUri;
     await _channel.invokeMethod('init', {
       'network': networkString.substring(networkString.lastIndexOf('.') + 1),
       'redirectUri': redirectUri.toString(),
-      'browserRedirectUri': mergedBrowserRedirectUri.toString()
+      'browserRedirectUri': mergedBrowserRedirectUri.toString(),
+      'enableOneKey': enableOneKey ?? false,
     });
   }
 

@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.torusresearch.customauth.CustomAuth
 import org.torusresearch.customauth.types.*
 import org.torusresearch.customauth.utils.Helpers.unwrapCompletionException
+import org.torusresearch.torusutils.helpers.Utils
 
 /** TorusDirectPlugin */
 class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
@@ -65,7 +66,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             } catch (e: Throwable) {
                 launch(Dispatchers.Main) {
                     val unwrappedError = unwrapCompletionException(e)
-                    result.error(unwrappedError::class.simpleName, unwrappedError.message, null)
+                    unwrappedError::class.simpleName?.let { result.error(it, unwrappedError.message, null) }
                 }
             }
         }
@@ -79,6 +80,10 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                         TorusNetwork.valueOfLabel(call.argument("network")),
                         call.argument("redirectUri")
                 )
+                val enableOneKey = call.argument<Boolean>("enableOneKey")
+                if (enableOneKey != null) {
+                    torusDirectArgs.isEnableOneKey = enableOneKey
+                }
                 Log.d(
                         "${CustomAuthPlugin::class.qualifiedName}#init",
                         "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
@@ -103,7 +108,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 )
                 return mapOf(
                         "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey,
+                        "privateKey" to Utils.padLeft(torusResponse.privateKey.toString(16), '0', 64),
                         "userInfo" to listOf(mapOf(
                                 "email" to torusResponse.userInfo.email,
                                 "name" to torusResponse.userInfo.name,
@@ -133,7 +138,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 )
                 return mapOf(
                         "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey,
+                        "privateKey" to Utils.padLeft(torusResponse.privateKey.toString(16), '0', 64),
                         "userInfo" to torusResponse.userInfo.map {
                             mapOf(
                                 "email" to it.email,
@@ -165,7 +170,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 )
                 return mapOf(
                         "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                        "privateKey" to Utils.padLeft(torusResponse.privateKey.toString(16), '0', 64),
                 )
             }
 
@@ -184,7 +189,7 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 )
                 return mapOf(
                         "publicAddress" to torusResponse.publicAddress,
-                        "privateKey" to torusResponse.privateKey
+                        "privateKey" to Utils.padLeft(torusResponse.privateKey.toString(16), '0', 64),
                 )
             }
         }
