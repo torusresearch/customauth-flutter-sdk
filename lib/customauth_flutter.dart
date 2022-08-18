@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-enum TorusNetwork { mainnet, testnet }
+enum TorusNetwork { mainnet, testnet, cyan }
 
 enum TorusLogin {
   google,
@@ -102,19 +102,20 @@ class UserCancelledException implements Exception {}
 class NoAllowedBrowserFoundException implements Exception {}
 
 class CustomAuth {
-  static const MethodChannel _channel = const MethodChannel('customauth');
+  static const MethodChannel _channel = MethodChannel('customauth');
 
-  static Future<void> init({
-    required TorusNetwork network,
-    required Uri redirectUri,
-    Uri? browserRedirectUri,
-  }) async {
+  static Future<void> init(
+      {required TorusNetwork network,
+      required Uri redirectUri,
+      Uri? browserRedirectUri,
+      bool? enableOneKey}) async {
     final String networkString = network.toString();
     final Uri mergedBrowserRedirectUri = browserRedirectUri ?? redirectUri;
     await _channel.invokeMethod('init', {
       'network': networkString.substring(networkString.lastIndexOf('.') + 1),
       'redirectUri': redirectUri.toString(),
-      'browserRedirectUri': mergedBrowserRedirectUri.toString()
+      'browserRedirectUri': mergedBrowserRedirectUri.toString(),
+      'enableOneKey': enableOneKey ?? false,
     });
   }
 
@@ -141,11 +142,11 @@ class CustomAuth {
     } on PlatformException catch (e) {
       switch (e.code) {
         case "UserCancelledException":
-          throw new UserCancelledException();
+          throw UserCancelledException();
         case "NoAllowedBrowserFoundException":
-          throw new NoAllowedBrowserFoundException();
+          throw NoAllowedBrowserFoundException();
         default:
-          throw e;
+          rethrow;
       }
     }
   }
@@ -174,11 +175,11 @@ class CustomAuth {
     } on PlatformException catch (e) {
       switch (e.code) {
         case "UserCancelledException":
-          throw new UserCancelledException();
+          throw UserCancelledException();
         case "NoAllowedBrowserFoundException":
-          throw new NoAllowedBrowserFoundException();
+          throw NoAllowedBrowserFoundException();
         default:
-          throw e;
+          rethrow;
       }
     }
   }

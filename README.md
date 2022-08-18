@@ -41,7 +41,7 @@ await TorusDirect.triggerLogin(
     typeOfLogin: TorusLogin.google,
     verifier: 'google-lrc',
     clientId:
-        '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com');
+        'GOOGLE_CLIENT_ID');
 ```
 
 Or get Torus key directly if you're using JWT verifier:
