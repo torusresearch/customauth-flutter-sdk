@@ -102,7 +102,7 @@ class UserCancelledException implements Exception {}
 class NoAllowedBrowserFoundException implements Exception {}
 
 class CustomAuth {
-  static const MethodChannel _channel = const MethodChannel('customauth');
+  static const MethodChannel _channel = MethodChannel('customauth');
 
   static Future<void> init(
       {required TorusNetwork network,
@@ -142,11 +142,11 @@ class CustomAuth {
     } on PlatformException catch (e) {
       switch (e.code) {
         case "UserCancelledException":
-          throw new UserCancelledException();
+          throw UserCancelledException();
         case "NoAllowedBrowserFoundException":
-          throw new NoAllowedBrowserFoundException();
+          throw NoAllowedBrowserFoundException();
         default:
-          throw e;
+          rethrow;
       }
     }
   }
@@ -175,11 +175,11 @@ class CustomAuth {
     } on PlatformException catch (e) {
       switch (e.code) {
         case "UserCancelledException":
-          throw new UserCancelledException();
+          throw UserCancelledException();
         case "NoAllowedBrowserFoundException":
-          throw new NoAllowedBrowserFoundException();
+          throw NoAllowedBrowserFoundException();
         default:
-          throw e;
+          rethrow;
       }
     }
   }

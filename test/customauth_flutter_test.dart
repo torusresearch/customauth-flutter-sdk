@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:customauth_flutter/customauth.dart';
+import 'package:customauth_flutter/customauth_flutter.dart';
 
 void main() {
   const MethodChannel channel = MethodChannel('customauth');
