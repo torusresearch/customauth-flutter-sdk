@@ -6,6 +6,12 @@ Torus CustomAuth SDK for Flutter applications.
 
 Checkout [`example/`](/example).
 
+## Installation
+
+Install from 
+```
+https://pub.dev/packages/customauth_flutter
+```
 ## Usage
 
 Add `customauth` package to your pubspec and import the package:
