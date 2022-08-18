@@ -1,2 +1,8 @@
 .idea
 example
+.idea/libraries/Dart_SDK.xml
+.idea/modules.xml
+.idea/runConfigurations/example_lib_main_dart.xml
+customauth.iml
+example/pubspec.lock
+pubspec.lock
