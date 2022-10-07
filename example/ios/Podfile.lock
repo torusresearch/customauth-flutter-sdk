@@ -1,17 +1,17 @@
 PODS:
   - BigInt (5.0.0)
   - CryptoSwift (1.5.1)
-  - CustomAuth (4.0.1):
+  - CustomAuth (4.1.0):
     - JWTDecode (~> 2.6)
     - Torus-utils (~> 3.0.0)
   - customauth_flutter (1.0.0):
-    - CustomAuth (~> 4.0.1)
+    - CustomAuth (~> 4.1.0)
     - Flutter
   - Flutter (1.0.0)
   - GenericJSON (2.0.1)
   - JWTDecode (2.6.3)
-  - PromiseKit/CorePromise (6.18.0)
-  - PromiseKit/Foundation (6.18.0):
+  - PromiseKit/CorePromise (6.18.1)
+  - PromiseKit/Foundation (6.18.1):
     - PromiseKit/CorePromise
   - secp256k1.swift (0.1.4)
   - Torus-fetchNodeDetails (3.0.0):
@@ -56,12 +56,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
   CryptoSwift: c4f2debceb38bf44c80659afe009f71e23e4a082
-  CustomAuth: d392381016783e281df11f175efbba2096feab19
-  customauth_flutter: 440371e3d039b1253d3f4902dc99d2c6ace2a79d
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  CustomAuth: 45d5fd9962530fa0d4c8e7e4c867c1bb81ae48ea
+  customauth_flutter: 12aef8878adf53fc9377c6f2830d36af73812e6f
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GenericJSON: a6e74e2c457f8693caab08e0eafde7d97e6666de
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
-  PromiseKit: 879fa89b55fcb8f11ade9aad0c9721850bb71b9f
+  PromiseKit: 49d70c53d5d20e346beaea4b276b5dd2ab446bb4
   secp256k1.swift: a7e7a214f6db6ce5db32cc6b2b45e5c4dd633634
   Torus-fetchNodeDetails: 186d6bc852bfd943f8d25154f25b5cc5fd6a03b1
   Torus-utils: e3bbb4f884fce6290b43a86ee88544fbd5addb91
