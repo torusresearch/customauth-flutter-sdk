@@ -16,7 +16,10 @@ import kotlinx.coroutines.launch
 import org.torusresearch.customauth.CustomAuth
 import org.torusresearch.customauth.types.*
 import org.torusresearch.customauth.utils.Helpers.unwrapCompletionException
+import org.torusresearch.fetchnodedetails.types.TorusNetwork
 import org.torusresearch.torusutils.helpers.Utils
+import java.util.*
+import kotlin.collections.HashMap
 
 /** TorusDirectPlugin */
 class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
@@ -77,16 +80,20 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             "init" -> {
                 torusDirectArgs = CustomAuthArgs(
                         call.argument("browserRedirectUri"),
-                        TorusNetwork.valueOfLabel(call.argument("network")),
+                    (call.argument("network") as String?)?.uppercase(Locale.ROOT)?.let { TorusNetwork.valueOf(it) },
                         call.argument("redirectUri")
                 )
                 val enableOneKey = call.argument<Boolean>("enableOneKey")
                 if (enableOneKey != null) {
                     torusDirectArgs.isEnableOneKey = enableOneKey
                 }
+                val networkUrl = call.argument<String>("networkUrl")
+                if (networkUrl != null) {
+                    torusDirectArgs.networkUrl = networkUrl
+                }
                 Log.d(
                         "${CustomAuthPlugin::class.qualifiedName}#init",
-                        "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}"
+                        "network=${torusDirectArgs.network}, redirectUri=${torusDirectArgs.redirectUri}, networkUrl=${torusDirectArgs.networkUrl}"
                 )
                 return null
             }
