@@ -108,7 +108,8 @@ class CustomAuth {
       {required TorusNetwork network,
       required Uri redirectUri,
       Uri? browserRedirectUri,
-      bool? enableOneKey}) async {
+      bool? enableOneKey,
+      String? networkUrl}) async {
     final String networkString = network.toString();
     final Uri mergedBrowserRedirectUri = browserRedirectUri ?? redirectUri;
     await _channel.invokeMethod('init', {
@@ -116,6 +117,7 @@ class CustomAuth {
       'redirectUri': redirectUri.toString(),
       'browserRedirectUri': mergedBrowserRedirectUri.toString(),
       'enableOneKey': enableOneKey ?? false,
+      'networkUrl': networkUrl ?? '',
     });
   }
 
