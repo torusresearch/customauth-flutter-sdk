@@ -8,6 +8,7 @@ struct CustomAuthArgs {
     let browserRedirectUri: String;
     let redirectUri: String;
     let enableOneKey: Bool;
+    let networkUrl:String?;
     
     var ethereumNetwork: EthereumNetworkFND {
         get {
@@ -48,7 +49,8 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 let network = args["network"] as? String,
                 let browserRedirectUri = args["browserRedirectUri"] as? String,
                 let redirectUri = args["redirectUri"] as? String,
-                let enableOneKey = args["enableOneKey"] as? Bool
+                let enableOneKey = args["enableOneKey"] as? Bool,
+                let networkUrl = args["networkUrl"] as? String
             else {
                 result(FlutterError(
                         code: "MISSING_ARGUMENTS",
@@ -56,11 +58,12 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                         details: nil))
                 return
             }
+            
             self.customAuthArgs = CustomAuthArgs(
-                network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey)
+                network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey,networkUrl:networkUrl)
             print("CustomAuthPlugin#init: " +
                     "network=\(network), " +
-                    "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey)")
+                    "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey),networkUrl=\(networkUrl)")
             result(nil)
         case "triggerLogin":
             guard let initArgs = self.customAuthArgs
@@ -104,7 +107,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
-                network: initArgs.ethereumNetwork
+                network: initArgs.ethereumNetwork,
+                enableOneKey: customAuthArgs?.enableOneKey ?? false,
+                networkUrl: customAuthArgs?.networkUrl
             )
             customAuthSdk.triggerLogin().done { data in
                 result(data)
@@ -160,7 +165,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     aggregateVerifierType: verifierTypes(rawValue: aggregateVerifierType)!,
                     aggregateVerifierName: verifierIdentifier,
                     subVerifierDetails: castedSubVerifierDetailsArray,
-                    network: initArgs.ethereumNetwork
+                    network: initArgs.ethereumNetwork,
+                    enableOneKey: customAuthArgs?.enableOneKey ?? false,
+                    networkUrl: customAuthArgs?.networkUrl
                 )
                 customAuthSdk.triggerLogin().done { data in
                     result(data)
@@ -204,7 +211,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 aggregateVerifierType: .singleLogin,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
-                network: initArgs.ethereumNetwork
+                network: initArgs.ethereumNetwork,
+                enableOneKey: customAuthArgs?.enableOneKey ?? false,
+                networkUrl: customAuthArgs?.networkUrl
             )
             customAuthSdk.getTorusKey(verifier: verifier, verifierId: verifierId, idToken: idToken, userData: verifierParams).done { data in
                 result(data)
@@ -256,7 +265,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 aggregateVerifierType: .singleIdVerifier,
                 aggregateVerifierName: verifier,
                 subVerifierDetails: [subVerifierDetails],
-                network: initArgs.ethereumNetwork
+                network: initArgs.ethereumNetwork,
+                enableOneKey: customAuthArgs?.enableOneKey ?? false,
+                networkUrl: customAuthArgs?.networkUrl
             )
             customAuthSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails).done { data in
                 result(data)
