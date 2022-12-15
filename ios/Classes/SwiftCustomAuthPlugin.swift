@@ -55,7 +55,6 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let browserRedirectUri = args["browserRedirectUri"] as? String,
                     let redirectUri = args["redirectUri"] as? String,
                     let enableOneKey = args["enableOneKey"] as? Bool
-                    // let networkUrl:String = args["networkUrl"] as? String
                 else {
                     result(FlutterError(
                         code: "MISSING_ARGUMENTS",
@@ -63,8 +62,12 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                         details: nil))
                     return
                 }
+                var networkUrl = args["networkUrl"] as? String
+                if networkUrl?.isEmpty ?? true{
+                    networkUrl = nil
+                }
                 self.customAuthArgs = CustomAuthArgs(
-                    network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey, networkUrl: nil)
+                    network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey, networkUrl: networkUrl)
                 print("CustomAuthPlugin#init: " +
                       "network=\(network), " +
                       "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey)")
