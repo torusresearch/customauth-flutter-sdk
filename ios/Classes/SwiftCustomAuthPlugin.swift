@@ -57,28 +57,28 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let enableOneKey = args["enableOneKey"] as? Bool
                 else {
                     result(FlutterError(
-                        code: "MISSING_ARGUMENTS",
-                        message: "Missing init arguments",
-                        details: nil))
+                            code: "MISSING_ARGUMENTS",
+                            message: "Missing init arguments",
+                            details: nil))
                     return
                 }
                 var networkUrl = args["networkUrl"] as? String
-                if networkUrl?.isEmpty ?? true{
+                if networkUrl?.isEmpty ?? true {
                     networkUrl = nil
                 }
                 self.customAuthArgs = CustomAuthArgs(
                     network: network, browserRedirectUri: browserRedirectUri, redirectUri: redirectUri, enableOneKey: enableOneKey, networkUrl: networkUrl)
                 print("CustomAuthPlugin#init: " +
-                      "network=\(network), " +
-                      "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey)")
+                        "network=\(network), " +
+                        "browserRedirectUri=\(redirectUri), redirectUri=\(redirectUri), enableOneKey=\(enableOneKey)")
                 result(nil)
             case "triggerLogin":
                 guard let initArgs = self.customAuthArgs
                 else {
                     result(FlutterError(
-                        code: "NotInitializedException",
-                        message: "CustomAuth.init has to be called first",
-                        details: nil))
+                            code: "NotInitializedException",
+                            message: "CustomAuth.init has to be called first",
+                            details: nil))
                     return
                 }
                 guard
@@ -87,16 +87,16 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let clientId = args["clientId"] as? String
                 else {
                     result(FlutterError(
-                        code: "MissingArgumentException",
-                        message: "Missing triggerLogin arguments",
-                        details: nil))
+                            code: "MissingArgumentException",
+                            message: "Missing triggerLogin arguments",
+                            details: nil))
                     return
                 }
                 guard let loginProvider = LoginProviders(rawValue: typeOfLogin) else {
                     result(FlutterError(
-                        code: "InvalidTypeOfLoginException",
-                        message: "Invalid type of login",
-                        details: nil))
+                            code: "InvalidTypeOfLoginException",
+                            message: "Invalid type of login",
+                            details: nil))
                     return
                 }
 
@@ -119,8 +119,8 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     networkUrl: customAuthArgs?.networkUrl
                 )
                 do {
-                let data = try await customAuthSdk.triggerLogin()
-                result(data)
+                    let data = try await customAuthSdk.triggerLogin()
+                    result(data)
                 } catch {
                     result(FlutterError(
                         code: "IosSdkError", message: "Error from iOS SDK: \(error.localizedDescription)", details: error.localizedDescription
@@ -130,9 +130,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 guard let initArgs = self.customAuthArgs
                 else {
                     result(FlutterError(
-                        code: "NotInitializedException",
-                        message: "TorusDirect.init has to be called first",
-                        details: nil))
+                            code: "NotInitializedException",
+                            message: "TorusDirect.init has to be called first",
+                            details: nil))
                     return
                 }
                 guard
@@ -141,9 +141,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let subVerifierDetailsArray = args["subVerifierDetailsArray"] as? [Dictionary<String, Any>]
                 else {
                     result(FlutterError(
-                        code: "MissingArgumentException",
-                        message: "Missing triggerAggregateLogin arguments",
-                        details: nil))
+                            code: "MissingArgumentException",
+                            message: "Missing triggerAggregateLogin arguments",
+                            details: nil))
                     return
                 }
                 var castedSubVerifierDetailsArray: [SubVerifierDetails] = []
@@ -152,9 +152,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                         rawValue: details["typeOfLogin"] as! String
                     ) else {
                         result(FlutterError(
-                            code: "InvalidTypeOfLoginException",
-                            message: "Invalid type of login",
-                            details: nil))
+                                code: "InvalidTypeOfLoginException",
+                                message: "Invalid type of login",
+                                details: nil))
                         return
                     }
                     let jwtParams = details["jwtParams"] as? [String: String]
@@ -178,7 +178,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                         networkUrl: customAuthArgs?.networkUrl
                     )
                     do {
-                    let data = try await customAuthSdk.triggerLogin()
+                        let data = try await customAuthSdk.triggerLogin()
                         result(data)
                     } catch {
                         result(FlutterError(
@@ -190,9 +190,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 guard let initArgs = self.customAuthArgs
                 else {
                     result(FlutterError(
-                        code: "NotInitializedException",
-                        message: "CustomAuth.init has to be called first",
-                        details: nil))
+                            code: "NotInitializedException",
+                            message: "CustomAuth.init has to be called first",
+                            details: nil))
                     return
                 }
                 guard
@@ -202,9 +202,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let verifierParams = args["verifierParams"] as? [String: String]
                 else {
                     result(FlutterError(
-                        code: "MissingArgumentException",
-                        message: "Missing getTorusKey arguments",
-                        details: nil))
+                            code: "MissingArgumentException",
+                            message: "Missing getTorusKey arguments",
+                            details: nil))
                     return
                 }
                 let subVerifierDetails = SubVerifierDetails(
@@ -236,9 +236,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                 guard let initArgs = self.customAuthArgs
                 else {
                     result(FlutterError(
-                        code: "NotInitializedException",
-                        message: "CustomAuth.init has to be called first",
-                        details: nil))
+                            code: "NotInitializedException",
+                            message: "CustomAuth.init has to be called first",
+                            details: nil))
                     return
                 }
                 guard
@@ -247,9 +247,9 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     let subVerifierInfoArray = args["subVerifierInfoArray"] as? [Dictionary<String, Any>]
                 else {
                     result(FlutterError(
-                        code: "MissingArgumentException",
-                        message: "Missing getAggregateTorusKey arguments",
-                        details: nil))
+                            code: "MissingArgumentException",
+                            message: "Missing getAggregateTorusKey arguments",
+                            details: nil))
                     return
                 }
                 if subVerifierInfoArray.count != 1 {
@@ -280,7 +280,7 @@ public class SwiftCustomAuthPlugin: NSObject, FlutterPlugin {
                     networkUrl: customAuthArgs?.networkUrl
                 )
                 do {
-                let data = try await customAuthSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails)
+                    let data = try await customAuthSdk.getAggregateTorusKey(verifier: verifier, verifierId: verifierId, idToken: sviaIdToken, subVerifierDetails: subVerifierDetails)
                     result(data)
                 } catch {
                     result(FlutterError(

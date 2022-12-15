@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-enum TorusNetwork { mainnet, testnet, cyan }
+enum TorusNetwork { mainnet, testnet, cyan, aqua, celeste }
 
 enum TorusLogin {
   google,
