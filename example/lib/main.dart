@@ -27,8 +27,7 @@ class _MyAppState extends State<MyApp> {
         network: TorusNetwork.testnet,
         browserRedirectUri:
             Uri.parse('https://scripts.toruswallet.io/redirect.html'),
-        redirectUri: Uri.parse('torus://org.torusresearch.sample/redirect'),
-        networkUrl: '');
+        redirectUri: Uri.parse('torus://org.torusresearch.sample/redirect'));
   }
 
   @override
