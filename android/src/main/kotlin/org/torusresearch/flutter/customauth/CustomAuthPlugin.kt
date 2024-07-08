@@ -81,7 +81,8 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
                 torusDirectArgs = CustomAuthArgs(
                         call.argument("browserRedirectUri"),
                     (call.argument("network") as String?)?.uppercase(Locale.ROOT)?.let { TorusNetwork.valueOf(it) },
-                        call.argument("redirectUri")
+                        call.argument("redirectUri"),
+                    call.argument("clientid")
                 )
                 val enableOneKey = call.argument<Boolean>("enableOneKey")
                 if (enableOneKey != null) {

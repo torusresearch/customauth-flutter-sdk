@@ -19,7 +19,8 @@ void main() {
 
   test('init', () async {
     await CustomAuth.init(
-        network: TorusNetwork.testnet,
+        network: TorusNetwork.aqua,
+        clientid: "YOUR_CLIENT_ID",
         browserRedirectUri:
             Uri.parse('https://scripts.toruswallet.io/redirect.html'),
         redirectUri: Uri.parse(

@@ -107,6 +107,7 @@ class CustomAuth {
   static Future<void> init(
       {required TorusNetwork network,
       required Uri redirectUri,
+      required String clientid,
       Uri? browserRedirectUri,
       bool? enableOneKey,
       String? networkUrl}) async {
@@ -115,6 +116,7 @@ class CustomAuth {
     await _channel.invokeMethod('init', {
       'network': networkString.substring(networkString.lastIndexOf('.') + 1),
       'redirectUri': redirectUri.toString(),
+      'clientid': clientid,
       'browserRedirectUri': mergedBrowserRedirectUri.toString(),
       'enableOneKey': enableOneKey ?? false,
       'networkUrl': networkUrl ?? '',

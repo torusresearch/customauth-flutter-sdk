@@ -24,7 +24,8 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     await CustomAuth.init(
-        network: TorusNetwork.testnet,
+        network: TorusNetwork.aqua,
+        clientid: "YOUR_CLIENT_ID",
         browserRedirectUri:
             Uri.parse('https://scripts.toruswallet.io/redirect.html'),
         redirectUri: Uri.parse('torus://org.torusresearch.sample/redirect'));
