@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:customauth_flutter/customauth_flutter.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +24,8 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     await CustomAuth.init(
-        network: TorusNetwork.testnet,
+        network: Web3AuthNetwork.aqua,
+        clientid: "YOUR_CLIENT_ID",
         browserRedirectUri:
             Uri.parse('https://scripts.toruswallet.io/redirect.html'),
         redirectUri: Uri.parse('torus://org.torusresearch.sample/redirect'));
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Torus CustomAuth Example'),
+          title: const Text('Web3Auth CustomAuth Example'),
         ),
         body: Center(
             child: Column(
@@ -68,10 +69,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  VoidCallback _login(Future<TorusCredentials> Function() method) {
+  VoidCallback _login(Future<Web3AuthCredentials> Function() method) {
     return () async {
       try {
-        final TorusCredentials credentials = await method();
+        final Web3AuthCredentials credentials = await method();
         setState(() {
           _privateKey = credentials.privateKey;
         });
@@ -83,43 +84,43 @@ class _MyAppState extends State<MyApp> {
     };
   }
 
-  Future<TorusCredentials> _withGoogle() {
+  Future<Web3AuthCredentials> _withGoogle() {
     return CustomAuth.triggerLogin(
-        typeOfLogin: TorusLogin.google,
+        typeOfLogin: Web3AuthLogin.google,
         verifier: 'google-lrc',
         clientId:
             '221898609709-obfn3p63741l5333093430j3qeiinaa8.apps.googleusercontent.com',
         jwtParams: {"prompt": "login"});
   }
 
-  Future<TorusCredentials> _withFacebook() {
+  Future<Web3AuthCredentials> _withFacebook() {
     return CustomAuth.triggerLogin(
-        typeOfLogin: TorusLogin.facebook,
+        typeOfLogin: Web3AuthLogin.facebook,
         verifier: 'facebook-lrc',
         clientId: '617201755556395');
   }
 
-  Future<TorusCredentials> _withReddit() {
+  Future<Web3AuthCredentials> _withReddit() {
     return CustomAuth.triggerLogin(
-        typeOfLogin: TorusLogin.reddit,
+        typeOfLogin: Web3AuthLogin.reddit,
         verifier: 'torus-reddit-test',
         clientId: 'YNsv1YtA_o66fA');
   }
 
-  Future<TorusCredentials> _withDiscord() {
+  Future<Web3AuthCredentials> _withDiscord() {
     return CustomAuth.triggerLogin(
-        typeOfLogin: TorusLogin.discord,
+        typeOfLogin: Web3AuthLogin.discord,
         verifier: 'discord-lrc',
         clientId: '682533837464666198');
   }
 
-  Future<TorusCredentials> _withAggregate() {
+  Future<Web3AuthCredentials> _withAggregate() {
     return CustomAuth.triggerAggregateLogin(
-      aggerateVerifierType: TorusAggregateVerifierType.single_id_verifier,
+      aggerateVerifierType: Web3AuthAggregateVerifierType.single_id_verifier,
       verifierIdentifier: 'chai-google-aggregate-test',
-      subVerifierDetailsArray: <TorusSubVerifierDetails>[
-        TorusSubVerifierDetails(
-          typeOfLogin: TorusLogin.google,
+      subVerifierDetailsArray: <Web3AuthSubVerifierDetails>[
+        Web3AuthSubVerifierDetails(
+          typeOfLogin: Web3AuthLogin.google,
           verifier: 'google-chai',
           clientId:
               '884454361223-nnlp6vtt0me9jdsm2ptg4d1dh8i0tu74.apps.googleusercontent.com',
@@ -128,7 +129,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<TorusCredentials> _withGetTorusKey() {
+  Future<Web3AuthCredentials> _withGetTorusKey() {
     return CustomAuth.getTorusKey(
       verifier: 'weact-email-password-ic-verifier',
       verifierId: 'flutteryfi@gmail.com',
