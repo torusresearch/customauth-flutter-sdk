@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import org.torusresearch.customauth.CustomAuth
 import org.torusresearch.customauth.types.*
 import org.torusresearch.customauth.utils.Helpers.unwrapCompletionException
-import org.torusresearch.fetchnodedetails.types.TorusNetwork
+import org.torusresearch.fetchnodedetails.types.Web3AuthNetwork
 import org.torusresearch.torusutils.helpers.Utils
 import java.util.*
 import kotlin.collections.HashMap
@@ -80,7 +80,8 @@ class CustomAuthPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
             "init" -> {
                 torusDirectArgs = CustomAuthArgs(
                         call.argument("browserRedirectUri"),
-                    (call.argument("network") as String?)?.uppercase(Locale.ROOT)?.let { TorusNetwork.valueOf(it) },
+                    (call.argument("network") as String?)?.uppercase(Locale.ROOT)
+                        ?.let { Web3AuthNetwork.valueOf(it) },
                         call.argument("redirectUri"),
                     call.argument("clientid")
                 )

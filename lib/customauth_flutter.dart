@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-enum TorusNetwork { mainnet, testnet, cyan, aqua, celeste }
+enum Web3AuthNetwork { mainnet, testnet, cyan, aqua, celeste }
 
-enum TorusLogin {
+enum Web3AuthLogin {
   google,
   facebook,
   reddit,
@@ -19,21 +19,21 @@ enum TorusLogin {
   jwt
 }
 
-enum TorusAggregateVerifierType { single_id_verifier }
+enum Web3AuthAggregateVerifierType { single_id_verifier }
 
-class TorusCredentials {
+class Web3AuthCredentials {
   final String publicAddress;
   final String privateKey;
-  final List<TorusUserInfo> userInfo;
+  final List<Web3AuthUserInfo> userInfo;
 
-  TorusCredentials(
+  Web3AuthCredentials(
     this.publicAddress,
     this.privateKey,
     this.userInfo,
   );
 }
 
-class TorusUserInfo {
+class Web3AuthUserInfo {
   final String? email;
   final String? name;
   final String? profileImage;
@@ -43,7 +43,7 @@ class TorusUserInfo {
   final String? accessToken;
   final String? idToken;
 
-  const TorusUserInfo({
+  const Web3AuthUserInfo({
     required this.email,
     required this.name,
     required this.profileImage,
@@ -55,13 +55,13 @@ class TorusUserInfo {
   });
 }
 
-class TorusSubVerifierDetails {
-  final TorusLogin typeOfLogin;
+class Web3AuthSubVerifierDetails {
+  final Web3AuthLogin typeOfLogin;
   final String verifier;
   final String clientId;
   final Map jwtParams;
 
-  TorusSubVerifierDetails({
+  Web3AuthSubVerifierDetails({
     required this.typeOfLogin,
     required this.verifier,
     required this.clientId,
@@ -80,11 +80,11 @@ class TorusSubVerifierDetails {
   }
 }
 
-class TorusSubVerifierInfo {
+class Web3AuthSubVerifierInfo {
   final String verifier;
   final String idToken;
 
-  TorusSubVerifierInfo({
+  Web3AuthSubVerifierInfo({
     required this.verifier,
     required this.idToken,
   });
@@ -104,8 +104,7 @@ class NoAllowedBrowserFoundException implements Exception {}
 class CustomAuth {
   static const MethodChannel _channel = MethodChannel('customauth');
 
-  static Future<void> init(
-      {required TorusNetwork network,
+  static Future<void> init({required Web3AuthNetwork network,
       required Uri redirectUri,
       required String clientid,
       Uri? browserRedirectUri,
@@ -123,8 +122,8 @@ class CustomAuth {
     });
   }
 
-  static Future<TorusCredentials> triggerLogin({
-    required TorusLogin typeOfLogin,
+  static Future<Web3AuthCredentials> triggerLogin({
+    required Web3AuthLogin typeOfLogin,
     required String verifier,
     required String clientId,
     Map jwtParams = const {},
@@ -138,7 +137,7 @@ class CustomAuth {
         'clientId': clientId,
         'jwtParams': jwtParams
       });
-      return TorusCredentials(
+      return Web3AuthCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
         _convertUserInfo(loginResponse['userInfo']),
@@ -155,10 +154,10 @@ class CustomAuth {
     }
   }
 
-  static Future<TorusCredentials> triggerAggregateLogin({
-    required TorusAggregateVerifierType aggerateVerifierType,
+  static Future<Web3AuthCredentials> triggerAggregateLogin({
+    required Web3AuthAggregateVerifierType aggerateVerifierType,
     required String verifierIdentifier,
-    required List<TorusSubVerifierDetails> subVerifierDetailsArray,
+    required List<Web3AuthSubVerifierDetails> subVerifierDetailsArray,
   }) async {
     try {
       final String aggregateVerifierTypeString =
@@ -171,7 +170,7 @@ class CustomAuth {
         'subVerifierDetailsArray':
             subVerifierDetailsArray.map((e) => e.toMap()).toList(),
       });
-      return TorusCredentials(
+      return Web3AuthCredentials(
         loginResponse['publicAddress'],
         loginResponse['privateKey'],
         _convertUserInfo(loginResponse['userInfo']),
@@ -188,7 +187,7 @@ class CustomAuth {
     }
   }
 
-  static Future<TorusCredentials> getTorusKey({
+  static Future<Web3AuthCredentials> getTorusKey({
     required String verifier,
     required String verifierId,
     required String idToken,
@@ -204,14 +203,14 @@ class CustomAuth {
       'idToken': idToken,
       'verifierParams': mergedVerfierParams
     });
-    return TorusCredentials(
+    return Web3AuthCredentials(
         getResponse['publicAddress'], getResponse['privateKey'], []);
   }
 
-  static Future<TorusCredentials> getAggregateTorusKey({
+  static Future<Web3AuthCredentials> getAggregateTorusKey({
     required String verifier,
     required String verifierId,
-    required List<TorusSubVerifierInfo> subVerifierInfoArray,
+    required List<Web3AuthSubVerifierInfo> subVerifierInfoArray,
   }) async {
     final Map getResponse =
         await _channel.invokeMethod('getAggregateTorusKey', {
@@ -220,18 +219,18 @@ class CustomAuth {
       'subVerifierInfoArray':
           subVerifierInfoArray.map((e) => e.toMap()).toList(),
     });
-    return TorusCredentials(
+    return Web3AuthCredentials(
         getResponse['publicAddress'], getResponse['privateKey'], []);
   }
 
-  static List<TorusUserInfo> _convertUserInfo(dynamic obj) {
+  static List<Web3AuthUserInfo> _convertUserInfo(dynamic obj) {
     if (obj == null) {
       return [];
     }
     if (obj is List<dynamic>) {
       return obj
           .whereType<Map>()
-          .map((e) => TorusUserInfo(
+          .map((e) => Web3AuthUserInfo(
                 email: e['email'],
                 name: e['name'],
                 profileImage: e['profileImage'],
@@ -246,7 +245,7 @@ class CustomAuth {
     if (obj is Map) {
       final Map e = obj;
       return [
-        TorusUserInfo(
+        Web3AuthUserInfo(
           email: e['email'],
           name: e['name'],
           profileImage: e['profileImage'],
